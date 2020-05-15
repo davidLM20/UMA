@@ -95,7 +95,7 @@ public class Empleado extends Persona {
 
     @Override
     public String toString() {
-        return "Empleado{" + "codigo=" + codigo + ", horario=" + horario + ", sueldo=" + sueldo + '}';
+        return "Empleado{" +super.toString() + "codigo=" + codigo + ", horario=" + horario + ", sueldo=" + sueldo + '}';
     }
         
 }

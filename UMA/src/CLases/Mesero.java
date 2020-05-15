@@ -99,7 +99,7 @@ public class Mesero extends Empleado {
 
     @Override
     public String toString() {
-        return "Mesero{" + "mesasAtendidas=" + mesasAtendidas + '}';
+        return "Mesero{" + super.toString() + "mesasAtendidas=" + mesasAtendidas + '}';
     }
         
 }

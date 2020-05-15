@@ -23,7 +23,7 @@ public class Plato {
     public Plato() {
     }
 
-    public Plato(String nombre, double costo, String descripcion, double tiempo) {
+    public Plato(String nombre, String descripcion, double costo, double tiempo) {
         this.nombre = nombre;
         this.costo = costo;
         this.descripcion = descripcion;

@@ -11,7 +11,7 @@ import CLases.Mesero;
  *
  * @author David Lopez
  */
-public class LogEmpleado {
+public class LogMesero {
 
     public Mesero CrearMesero(int mesasAtendidas, String codigo, String horario, 
             double sueldo, String cedula, String nombre, String apellido, String direccion, String celular) {
