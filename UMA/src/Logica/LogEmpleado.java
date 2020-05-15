@@ -5,10 +5,19 @@
  */
 package Logica;
 
+import CLases.Mesero;
+
 /**
  *
  * @author David Lopez
  */
 public class LogEmpleado {
-    
+
+    public Mesero CrearMesero(int mesasAtendidas, String codigo, String horario, 
+            double sueldo, String cedula, String nombre, String apellido, String direccion, String celular) {
+        
+        Mesero objJug = new Mesero(mesasAtendidas, codigo, horario, sueldo, cedula, nombre, apellido, direccion, celular);
+        return objJug;
+    }
+
 }
