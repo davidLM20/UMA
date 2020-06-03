@@ -50,7 +50,7 @@ public class UMA {
 
     public static void main(String[] args) throws ParseException, IOException {
         // TODO code application logic here
-        objDataPlato.ImportarPlatos(ArrayPlatos);
+        //objDataPlato.ImportarPlatos(ArrayPlatos);
         objDatosMeseros.ImportarMeseros(ArrayMeseros);
 
         int op = 0;
@@ -375,11 +375,14 @@ public class UMA {
         double coste = sc.nextDouble();
         System.out.println("Ingrese el tiempo aproximado del plato(plato)");
         double tiempo = sc.nextDouble();
+        
+        Plato objPlato = new Plato();
+        
+        ArrayPlatos.add(new Plato(nombre,descripcion,coste,tiempo));
+        objLogPlato.EscribirPlatos(ArrayPlatos);
+        //ArrayPlatos.add(plato);
 
-        Plato plato = objLogPlato.CrearPlato(nombre, descripcion, coste, tiempo);
-        ArrayPlatos.add(plato);
-
-        objLogPlato.GuardarPlato(plato);
+        //objLogPlato.GuardarPlato(plato);
         System.out.println("guardado exitoso");
     }
 
