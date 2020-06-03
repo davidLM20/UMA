@@ -14,12 +14,17 @@ import java.awt.Dimension;
 public class NewJFrame extends javax.swing.JFrame {
 
     RegistrarPlatos registrarPlatos = null;
-    
+
     /**
      * Creates new form NewJFrame
      */
+
+    MeseroCargarMenu mCmenu;
+    RegistrarPedido rPedido;
+
     public NewJFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -31,29 +36,34 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jDesktopPrincipal = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuGerente = new javax.swing.JMenu();
         jMenuItemRegistrarPlatos = new javax.swing.JMenuItem();
         jMenuCajero = new javax.swing.JMenu();
         jMenuMesero = new javax.swing.JMenu();
+        jMenuItemCargarMenu = new javax.swing.JMenuItem();
+        jMenuItemRegistroPedido = new javax.swing.JMenuItem();
+        jMenuItemAgregarPlato = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1227, Short.MAX_VALUE)
+        javax.swing.GroupLayout jDesktopPrincipalLayout = new javax.swing.GroupLayout(jDesktopPrincipal);
+        jDesktopPrincipal.setLayout(jDesktopPrincipalLayout);
+        jDesktopPrincipalLayout.setHorizontalGroup(
+            jDesktopPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1353, Short.MAX_VALUE)
         );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 584, Short.MAX_VALUE)
+        jDesktopPrincipalLayout.setVerticalGroup(
+            jDesktopPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 774, Short.MAX_VALUE)
         );
 
         jMenuGerente.setText("Gerente");
-
         jMenuItemRegistrarPlatos.setText("Registrar Platos");
         jMenuItemRegistrarPlatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,6 +78,26 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuBar1.add(jMenuCajero);
 
         jMenuMesero.setText("Mesero");
+
+        jMenuItemCargarMenu.setText("Cargar Menu");
+        jMenuItemCargarMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCargarMenuActionPerformed(evt);
+            }
+        });
+        jMenuMesero.add(jMenuItemCargarMenu);
+
+        jMenuItemRegistroPedido.setText("Registrar Pedido");
+        jMenuItemRegistroPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRegistroPedidoActionPerformed(evt);
+            }
+        });
+        jMenuMesero.add(jMenuItemRegistroPedido);
+
+        jMenuItemAgregarPlato.setText("AgregarPlato");
+        jMenuMesero.add(jMenuItemAgregarPlato);
+
         jMenuBar1.add(jMenuMesero);
 
         jMenu1.setText("Cocinero");
@@ -80,14 +110,12 @@ public class NewJFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jDesktopPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jDesktopPane1)
-                .addContainerGap())
+            .addComponent(jDesktopPrincipal)
         );
 
         pack();
@@ -97,7 +125,7 @@ public class NewJFrame extends javax.swing.JFrame {
         liberar();
         if(registrarPlatos == null){
             registrarPlatos = new RegistrarPlatos();
-            jDesktopPane1.add(registrarPlatos);
+            jDesktopPrincipal.add(registrarPlatos);
             Dimension desktopSize = this.getSize();
             Dimension FrameSize = registrarPlatos.getSize();
             registrarPlatos.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
@@ -105,6 +133,22 @@ public class NewJFrame extends javax.swing.JFrame {
             this.jMenuItemRegistrarPlatos.setEnabled(true);
         }
     }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
+    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt){
+
+    }
+    private void jMenuItemRegistroPedidoActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+
+        if (rPedido == null) {
+            rPedido = new RegistrarPedido();
+            jDesktopPrincipal.add(rPedido);
+            rPedido.setVisible(true);
+
+        }
+
+
+    }
+
 
     /**
      * @param args the command line arguments
@@ -113,7 +157,7 @@ public class NewJFrame extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -140,7 +184,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public void liberar() {
         if (registrarPlatos != null) {
             registrarPlatos.dispose();
@@ -150,12 +194,17 @@ public class NewJFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JDesktopPane jDesktopPrincipal;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCajero;
     private javax.swing.JMenu jMenuGerente;
+
     private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
+    private javax.swing.JMenuItem  jMenuItem1;
+    private javax.swing.JMenuItem jMenuItemCargarMenu;
+    private javax.swing.JMenuItem jMenuItemRegistroPedido;
+    private javax.swing.JMenuItem  jMenuItemAgregarPlato;
     private javax.swing.JMenu jMenuMesero;
     // End of variables declaration//GEN-END:variables
 }

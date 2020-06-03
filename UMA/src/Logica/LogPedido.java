@@ -6,8 +6,7 @@
 package Logica;
 
 import Archivos.Archivo;
-import CLases.Cajero;
-import CLases.Cocinero;
+
 import CLases.Mesero;
 import CLases.Pedido;
 import CLases.Plato;
@@ -24,6 +23,7 @@ public class LogPedido {
         
     static String fichero = "Archivos/Pedido.dat";
     static Pedido objPedido;
+    
     public static Pedido CrearPedido(Mesero mesero){
         objPedido = new Pedido();
         objPedido.setMesero(mesero);

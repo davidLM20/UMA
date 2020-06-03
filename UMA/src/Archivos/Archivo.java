@@ -46,6 +46,7 @@ public class Archivo {
                     ArrayObjetos.add(aux);
                 }
                 //sout de prueba
+                
                 System.out.println(aux.toString());
                 aux = ois.readObject();
             }
