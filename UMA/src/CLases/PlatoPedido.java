@@ -10,20 +10,27 @@ package CLases;
 //  @ Author : UMA_TEAM
 //
 //
-
-
-
-
 public class PlatoPedido {
-	public int estado;
-	public Plato plato;
+
+    public int cantidad;
+    public int estado;
+    public Plato plato;
 
     public PlatoPedido() {
     }
 
-    public PlatoPedido(int estado, Plato plato) {
+    public PlatoPedido(int cantidad, int estado, Plato plato) {
+        this.cantidad = cantidad;
         this.estado = estado;
         this.plato = plato;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public int getEstado() {
@@ -44,7 +51,8 @@ public class PlatoPedido {
 
     @Override
     public String toString() {
-        return "PlatoPedido{" + "estado=" + estado + ", plato=" + plato + '}';
+        return "PlatoPedido{" + "cantidad=" + cantidad + ", estado=" + estado + ", plato=" + plato + '}';
     }
-        
+  
+
 }

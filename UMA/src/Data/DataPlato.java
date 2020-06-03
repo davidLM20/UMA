@@ -20,11 +20,12 @@ import java.util.StringTokenizer;
  * @author David Lopez
  */
 public class DataPlato {
-public void ImportarPlatos(ArrayList<Plato> ArrayPlatos) {
+
+    public void ImportarPlatos(ArrayList<Plato> ArrayPlatos) {
         // PARA CARGAR LOS ARRAYS DE PAQUETES Y CLIENTES DESDE UN ARCHIVO TEXTO,
         // PARA ESTE EJEMPLO TENEMOS UN SOLO ARCHIVO, SE PUEDE TENER LOS QUE UDS. QUIERAN
         // PREFERIBLE SEPARAR POR CLASES
-        File f = new File("Platos.txt");
+        File f = new File("Archivos/Platos.txt");
         StringTokenizer st;
         Scanner entrada = null;
         String sCadena;
@@ -47,15 +48,14 @@ public void ImportarPlatos(ArrayList<Plato> ArrayPlatos) {
 
     public void GuardarArchivoPlatos(ArrayList<Plato> arrayPlato) throws FileNotFoundException, IOException {
         //
-        File f = new File("Platos.txt");
+        File f = new File("Archivos/Platos.txt");
         FileWriter fw = new FileWriter(f, false);
         BufferedWriter bw = new BufferedWriter(fw);
         for (Plato objPlato : arrayPlato) {
-            bw.write("\n");
             bw.write(objPlato.getNombre() + ",");
             bw.write(objPlato.getDescripcion() + ",");
             bw.write(objPlato.getCosto() + ",");
-            bw.write(objPlato.getTiempo() + ".");
+            bw.write(objPlato.getTiempo() + "\n");
         }
         bw.close();
         fw.close();
@@ -63,7 +63,7 @@ public void ImportarPlatos(ArrayList<Plato> ArrayPlatos) {
 
     public void AgregarArchivoPlatos(Plato objPlato) throws FileNotFoundException, IOException {
         //
-        File f = new File("Platos.txt");
+        File f = new File("Archivos/Platos.txt");
         FileWriter fw = new FileWriter(f, true);
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(objPlato.getNombre() + ",");
@@ -74,5 +74,5 @@ public void ImportarPlatos(ArrayList<Plato> ArrayPlatos) {
 
         fw.close();
     }
-    
+
 }

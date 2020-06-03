@@ -6,12 +6,17 @@
 package GUI;
 
 import CLases.Cajero;
+import CLases.Cocinero;
 import CLases.Mesero;
+import CLases.Pedido;
 import CLases.Plato;
+
 import Data.DataMeseros;
 import Data.DataPlato;
 import Logica.LogCajero;
+import Logica.LogCocinero;
 import Logica.LogMesero;
+import Logica.LogPedido;
 import Logica.LogPlato;
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,17 +35,24 @@ public class UMA {
     static ArrayList<Mesero> ArrayMeseros = new ArrayList<Mesero>();
     static ArrayList<Plato> ArrayPlatos = new ArrayList<Plato>();
     static ArrayList<Cajero> ArrayCajeros = new ArrayList<Cajero>();
-    static Cajero objCajero = new Cajero();
+    static ArrayList<Cocinero> ArrayCocineros = new ArrayList<Cocinero>();
 
+    static LogPlato objLogPlato = new LogPlato();
     static LogCajero objLogCajero = new LogCajero();
+    static LogPedido objLogPedido = new LogPedido();
 
     static DataPlato objDataPlato = new DataPlato();
-    static Scanner sc = new Scanner(System.in);
     static DataMeseros objDatosMeseros = new DataMeseros();
-    static LogPlato objLogPlato = new LogPlato();
+
+    static Cajero objCajero = new Cajero();
+
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws ParseException, IOException {
         // TODO code application logic here
+        objDataPlato.ImportarPlatos(ArrayPlatos);
+        objDatosMeseros.ImportarMeseros(ArrayMeseros);
+
         int op = 0;
 
         // menu Principal 
@@ -75,11 +87,7 @@ public class UMA {
             }
         }
 
-        objDatosMeseros.GuardarArrayMeseros(ArrayMeseros);
-        for (Mesero objMesero : ArrayMeseros) {
-            System.out.println(objMesero.toString());
-        }
-
+        //objDatosMeseros.GuardarArrayMeseros(ArrayMeseros);       
     }
 
     //************************************************ Funciones para el manejo de gerente ************************************
@@ -138,7 +146,7 @@ public class UMA {
             op3 = sc.nextInt();
             switch (op3) {
                 case 1:
-                    RegistrarMesero(ArrayMeseros);
+                    RegistrarMesero();
                     break;
                 case 2:
                     RegistrarCajero(ArrayCajeros);
@@ -158,14 +166,46 @@ public class UMA {
     }
 
     // seccion de metodos de creaccion de empleados
-    private static void RegistrarCocinero() {
+    private static void RegistrarCocinero() throws ParseException, IOException {
+
+        LogCocinero objLogCocinero = new LogCocinero();
+
+        sc.nextLine();
+
+        //int pedidosDespachados, String codigo, String horario, double sueldo, String cedula, String nombre, String apellido, String direccion, String celular
+        System.out.println("Ingrese Codigo");
+        String Codigo = sc.nextLine();
+        System.out.println("Ingrese nombres del Empleado");
+        String Nombres = sc.nextLine();
+        System.out.println("Ingrese apellidos del Empleado");
+        String Apellidos = sc.nextLine();
+        System.out.println("Ingrese direccion del Empleado");
+        String Direccion = sc.nextLine();
+        System.out.println("Ingrese cedula del Empleado");
+        String Cedula = sc.nextLine();
+        System.out.println("Ingrese Horario de trabajo del Empleado");
+        String horario = sc.nextLine();
+        System.out.println("Ingresa el celular de empleado");
+        String celular = sc.nextLine();
+        System.out.println("Ingrese numero de mesas ");
+        int pedidosDespachados = sc.nextInt();
+        System.out.println("Ingrese sueldo del Empleado");
+        double sueldo = sc.nextDouble();
+
+        Cocinero objCocinero = objLogCocinero.CrearCocinero(pedidosDespachados, Codigo, horario, sueldo, Cedula, Nombres, Apellidos, Direccion, celular);
+        ArrayCocineros.add(objCocinero);
+        objLogCocinero.GuardarCocinero(objCocinero);
+
+        System.out.println("Cocinero Registrado\n");
 
     }
 
     private static void RegistrarCajero(ArrayList<Cajero> ArrayCajeros) throws IOException {
         // INGRESAR UN Cajero
-        Scanner sc = new Scanner(System.in);
-      
+        Cajero objCajero = new Cajero();
+
+        sc.nextLine();
+
         //int pedidosDespachados, String codigo, String horario, double sueldo, String cedula, String nombre, String apellido, String direccion, String celular
         System.out.println("Ingrese cedula");
         String cedula = sc.nextLine();
@@ -184,18 +224,17 @@ public class UMA {
         System.out.println("Ingrese sueldo");
         double sueldo = sc.nextDouble();
         System.out.println("Ingrese numero de pedidos despachados");
-        int  pedidosDespachados = sc.nextInt();
+        int pedidosDespachados = sc.nextInt();
 
         objCajero = objLogCajero.CrearCajero(pedidosDespachados, codigo, horario, sueldo, cedula, nombre, apellido, direccion, celular);
-        System.out.println(objCajero);
         ArrayCajeros.add(objCajero);
-
         objLogCajero.GuardarCajero(objCajero);
 
-        System.out.println("Cajero Registrado");
+        System.out.println("Cajero Registrado\n");
+//       
     }
 
-    private static void RegistrarMesero(ArrayList<Mesero> ArrayMeseros) throws ParseException {
+    private static void RegistrarMesero() throws ParseException, IOException {
 
         LogMesero objLogMesero = new LogMesero();
 
@@ -215,21 +254,81 @@ public class UMA {
         String horario = sc.nextLine();
         System.out.println("Ingresa el celular de empleado");
         String celular = sc.nextLine();
-               
+
         System.out.println("Ingrese numero de mesas ");
         int mesasAtendidas = sc.nextInt();
         System.out.println("Ingrese sueldo del Empleado");
         double sueldo = sc.nextDouble();
 
-        Mesero objMesero = new Mesero();
-        objMesero = objLogMesero.CrearMesero(mesasAtendidas, Codigo, horario, sueldo, Cedula, Nombres, Apellidos, Direccion, celular);
-
+        //Mesero objMesero = new Mesero();
+        Mesero objMesero = objLogMesero.CrearMesero(mesasAtendidas, Codigo, horario, sueldo, Cedula, Nombres, Apellidos, Direccion, celular);
         ArrayMeseros.add(objMesero);
+        objLogMesero.GuardarMesero(objMesero);
         System.out.println("Mesero Registrado\n");
 
     }
+    //********************************************************Funciones pertenecientes a Mesero**********************************************
 
+    private static void Mesero() throws ParseException, IOException {
+        String tecla = null;
+        int op2 = 0;
+        do {
+            System.out.println("Que accion quiere realizar");
+            System.out.println("<1>Cargar Menu");
+            System.out.println("<2>Registrar Pedido");
+            System.out.println("<3>Agregar Adicional");
+            System.out.println("<4>");
+
+            System.out.println("**");
+            op2 = sc.nextInt();
+            switch (op2) {
+                case 1:
+                    //CargarMenu();
+                    break;
+                case 2:
+                    RegistrarPedido();
+                    break;
+                case 3:
+                    //AgregarAdicional();
+                    break;
+                case 4:
+                    break;
+
+            }
+
+            System.out.println("\n¿Quiere seguir?\n");
+            System.out.println("Presione: S para continuar o N para regresar al menu");
+            tecla = new Scanner(System.in).nextLine();
+        } while (tecla.equals("s") || tecla.equals("S"));
+    }
+
+    public static void RegistrarPedido() throws ParseException, IOException {
+        Pedido objPedido = objLogPedido.CrearPedido(null);
+        presentarMenu();
+        sc.nextLine();
+        String tecla = null;
+        do {
+            System.out.println("Seleccione el plato que desea");
+            int x = sc.nextInt();
+            System.out.println("Seleccione la cantidad del mismo");
+            int n = sc.nextInt();
+
+            objLogPedido.agregarPlatoPedido(objPedido, ArrayPlatos.get(x - 1), n);
+
+            System.out.println("\n¿Quiere seguir?\n");
+            System.out.println("Presione: S para continuar o N para regresar al menu");
+            tecla = new Scanner(System.in).nextLine();
+        } while (tecla.equals("s") || tecla.equals("S"));
+        objLogPedido.calcularTiempoAprox(objPedido);
+        System.out.println("El tiempo aproximado de este pedido es: " + objPedido.getTiempoAproximado() + "min");
+    }
+
+    private static void presentarMenu() throws ParseException, IOException {
+        ListarPlatos();
+    }
+//***********************************************************************
     // Seccion de metodos de administracion Plato
+
     private static void AdministrarPlato() throws ParseException, IOException {
         String tecla = null;
         int op4 = 0;
@@ -247,10 +346,10 @@ public class UMA {
                     CrearPlato();
                     break;
                 case 2:
-                    //EliminarPlato();
+                    EliminarPlato();
                     break;
                 case 3:
-                    //ListarPlatos();
+                    ListarPlatos();
                     break;
                 case 4:
                     break;
@@ -284,17 +383,35 @@ public class UMA {
         System.out.println("guardado exitoso");
     }
 
+    private static void ListarPlatos() throws ParseException, IOException {
+
+        //RECORRER UN ARRAY LIST
+        ArrayPlatos.clear();
+        objLogPlato.importarPlatos(ArrayPlatos);
+        int n = 1;
+        for (Plato objPlato : ArrayPlatos) //RECORRER EL ARRAY LIST
+        {
+            System.out.println(n + ". " + objPlato.toString());
+            n += 1;
+        }
+
+    }
+
+    private static void EliminarPlato() throws ParseException, IOException {
+        ListarPlatos();
+        System.out.println("Ingrese el numero del plato que desea eliminar");
+        int idPlato = sc.nextInt();
+        Plato plato_seleccionado = ArrayPlatos.get(idPlato - 1);
+        objLogPlato.EliminarPlato(ArrayPlatos, plato_seleccionado);
+
+    }
+
     // Seccion de metodos de administracion Menu
     private static void AdministrarMenu() {
     }
     // Seccion de metodos de estadisticas empleado
 
     private static void EstadisticasEmpleado() {
-    }
-
-    //********************************************************Funciones pertenecientes a Mesero**********************************************
-    private static void Mesero() {
-
     }
 
     //**********************************************************Fuciones pertenecientes a Cocienro********************************************

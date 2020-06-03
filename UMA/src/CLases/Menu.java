@@ -2,6 +2,7 @@ package CLases;
 
 //
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 
 
-public class Menu {
+public class Menu implements Serializable{
 	public String nombre;
 	public String descripcion;
 	public String dias;

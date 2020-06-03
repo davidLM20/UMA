@@ -2,6 +2,7 @@ package CLases;
 
 //
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 
 
-public class colaPedido {
+public class colaPedido implements Serializable{
 	public ArrayList<Pedido> listaPedidos = new ArrayList<Pedido>();
 
     public colaPedido() {

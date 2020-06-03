@@ -1,6 +1,7 @@
 package CLases;
 
 //
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 //  @ Author : UMA_TEAM
 //
 //
-public class Pedido {
+public class Pedido implements Serializable{
 
     public int numeroPedido;
     public double tiempoAproximado;
@@ -25,14 +26,14 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero, Plato plato) {
+    public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero, int cantidad, Plato plato) {
         this.numeroPedido = numeroPedido;
         this.tiempoAproximado = tiempoAproximado;
         this.estado = estado;
         this.mesero = mesero;
         this.cajero = cajero;
         this.cocinero = cocinero;
-        this.listaPlatoPedido.add(new PlatoPedido(1, plato));
+        this.listaPlatoPedido.add(new PlatoPedido(cantidad, 1, plato));
     }
 
     public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero) {
@@ -44,8 +45,8 @@ public class Pedido {
         this.cocinero = cocinero;
     }
 
-    public void agregarAdicional(Plato plato) {
-        this.listaPlatoPedido.add(new PlatoPedido(1, plato));
+    public void agregarAdicional(int cantidad, Plato plato) {
+        this.listaPlatoPedido.add(new PlatoPedido(cantidad, 1, plato));
     }
 
     public void despacharPedido() {
