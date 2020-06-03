@@ -5,12 +5,16 @@
  */
 package GUI;
 
+import java.awt.Dimension;
+
 /**
  *
  * @author David Lopez
  */
 public class NewJFrame extends javax.swing.JFrame {
 
+    RegistrarPlatos registrarPlatos = null;
+    
     /**
      * Creates new form NewJFrame
      */
@@ -30,6 +34,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuGerente = new javax.swing.JMenu();
+        jMenuItemRegistrarPlatos = new javax.swing.JMenuItem();
         jMenuCajero = new javax.swing.JMenu();
         jMenuMesero = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
@@ -40,14 +45,23 @@ public class NewJFrame extends javax.swing.JFrame {
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 433, Short.MAX_VALUE)
+            .addGap(0, 1227, Short.MAX_VALUE)
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 597, Short.MAX_VALUE)
+            .addGap(0, 584, Short.MAX_VALUE)
         );
 
         jMenuGerente.setText("Gerente");
+
+        jMenuItemRegistrarPlatos.setText("Registrar Platos");
+        jMenuItemRegistrarPlatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRegistrarPlatosActionPerformed(evt);
+            }
+        });
+        jMenuGerente.add(jMenuItemRegistrarPlatos);
+
         jMenuBar1.add(jMenuGerente);
 
         jMenuCajero.setText("Cajero");
@@ -65,15 +79,32 @@ public class NewJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jDesktopPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jDesktopPane1)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItemRegistrarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRegistrarPlatosActionPerformed
+        liberar();
+        if(registrarPlatos == null){
+            registrarPlatos = new RegistrarPlatos();
+            jDesktopPane1.add(registrarPlatos);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = registrarPlatos.getSize();
+            registrarPlatos.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            registrarPlatos.setVisible(true);
+            this.jMenuItemRegistrarPlatos.setEnabled(true);
+        }
+    }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -109,6 +140,14 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void liberar() {
+        if (registrarPlatos != null) {
+            registrarPlatos.dispose();
+            registrarPlatos = null;
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
@@ -116,6 +155,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCajero;
     private javax.swing.JMenu jMenuGerente;
+    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
     private javax.swing.JMenu jMenuMesero;
     // End of variables declaration//GEN-END:variables
 }
