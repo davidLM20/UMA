@@ -22,31 +22,34 @@ public class Pedido implements Serializable{
     public Cajero cajero;
     public Cocinero cocinero;
     public ArrayList<PlatoPedido> listaPlatoPedido = new ArrayList<PlatoPedido>();
-
+    public int numeroMesa;
+    
     public Pedido() {
     }
 
-    public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero, int cantidad, Plato plato) {
+    public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero, int cantidad, int estadoPlatoPedido,Plato plato,String observacion, int numeroMesa) {
         this.numeroPedido = numeroPedido;
         this.tiempoAproximado = tiempoAproximado;
         this.estado = estado;
         this.mesero = mesero;
         this.cajero = cajero;
         this.cocinero = cocinero;
-        this.listaPlatoPedido.add(new PlatoPedido(cantidad, 1, plato));
+        this.listaPlatoPedido.add(new PlatoPedido(cantidad,estadoPlatoPedido,plato,observacion));
+        this.numeroMesa = numeroMesa;
     }
 
-    public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero) {
+    public Pedido(int numeroPedido, double tiempoAproximado, int estado, Mesero mesero, Cajero cajero, Cocinero cocinero, int numeroMesa) {
         this.numeroPedido = numeroPedido;
         this.tiempoAproximado = tiempoAproximado;
         this.estado = estado;
         this.mesero = mesero;
         this.cajero = cajero;
         this.cocinero = cocinero;
+        this.numeroMesa = numeroMesa;
     }
 
-    public void agregarAdicional(int cantidad, Plato plato) {
-        this.listaPlatoPedido.add(new PlatoPedido(cantidad, 1, plato));
+    public void agregarAdicional(int cantidad, int estadoPlatoPedido,Plato plato, String observacion) {
+        this.listaPlatoPedido.add(new PlatoPedido(cantidad,estadoPlatoPedido,plato,observacion));
     }
 
     public void despacharPedido() {
@@ -112,9 +115,20 @@ public class Pedido implements Serializable{
         this.listaPlatoPedido = listaPlatoPedido;
     }
 
-    @Override
-    public String toString() {
-        return "Pedido{" + "numeroPedido=" + numeroPedido + ", tiempoAproximado=" + tiempoAproximado + ", estado=" + estado + ", mesero=" + mesero + ", cajero=" + cajero + ", cocinero=" + cocinero + ", listaPlatoPedido=" + listaPlatoPedido + '}';
+    public int getNumeroMesa() {
+        return numeroMesa;
     }
 
+    public void setNumeroMesa(int numeroMesa) {
+        this.numeroMesa = numeroMesa;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido{" + "numeroPedido=" + numeroPedido + ", tiempoAproximado=" + tiempoAproximado + ", estado=" + estado + ", mesero=" + mesero + ", cajero=" + cajero + ", cocinero=" + cocinero + ", listaPlatoPedido=" + listaPlatoPedido + ", numeroMesa=" + numeroMesa + '}';
+    }
+
+    
+    
+    
 }

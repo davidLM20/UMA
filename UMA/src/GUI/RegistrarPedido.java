@@ -7,6 +7,7 @@ package GUI;
 
 import CLases.Pedido;
 import CLases.Plato;
+import CLases.PlatoPedido;
 import Logica.LogPedido;
 import Logica.LogPlato;
 import java.io.IOException;
@@ -24,9 +25,13 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     /**
      * Creates new form RegistrarPedido
      */
-    ArrayList<Plato> ArrayPlatos = new ArrayList();
-    LogPedido objLogPedido = new LogPedido();
-    Pedido objPedido = new Pedido();
+    static ArrayList<Plato> ArrayPlatos = new ArrayList();
+    static ArrayList<Pedido> ArrayPedidos = new ArrayList();
+    static ArrayList<PlatoPedido> ArrayPlatoPedidos = new ArrayList();
+    static LogPedido objLogPedido = new LogPedido();
+    static Pedido objPedido = new Pedido();
+    static Plato auxPlato = new Plato();
+    int rowSel = -1;
 
     public RegistrarPedido() {
         initComponents();
@@ -57,11 +62,11 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jButtonBuscarNumero1 = new javax.swing.JButton();
         jButtonAgregarPlato1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        jSpinnerCantidadPlato = new javax.swing.JSpinner();
         jButtonBuscar = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jTextFieldTiempoApr1 = new javax.swing.JTextField();
+        jTextFieldPlatoAgregar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextAreaObservacion = new javax.swing.JTextArea();
@@ -71,11 +76,11 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTablePlatosPedido = new javax.swing.JTable();
-        jButtonCrearPedido = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jTextFieldNumeroMesa = new javax.swing.JTextField();
-        jTextFieldTiempoApr3 = new javax.swing.JTextField();
+        jTextFieldTiempoApr = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
+        jButtonCrearPedido1 = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -84,6 +89,13 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
+        setClosable(true);
+        try {
+            setSelected(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        setVisible(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic Medium", 1, 18)); // NOI18N
@@ -125,6 +137,11 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableListaGeneral.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableListaGeneralMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTableListaGeneral);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 470, 150));
@@ -154,8 +171,8 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jLabel9.setText("Observacion:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 320, -1, 20));
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 8, 1));
-        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, -1, -1));
+        jSpinnerCantidadPlato.setModel(new javax.swing.SpinnerNumberModel(1, 1, 8, 1));
+        jPanel1.add(jSpinnerCantidadPlato, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, -1, -1));
 
         jButtonBuscar.setText("Buscar");
         jPanel1.add(jButtonBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 150, -1, -1));
@@ -170,12 +187,12 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 140, -1));
 
-        jTextFieldTiempoApr1.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldPlatoAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTiempoApr1ActionPerformed(evt);
+                jTextFieldPlatoAgregarActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextFieldTiempoApr1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 160, -1));
+        jPanel1.add(jTextFieldPlatoAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 160, -1));
 
         jLabel10.setText("Plato por agregar");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
@@ -219,14 +236,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
 
         jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 470, 150));
 
-        jButtonCrearPedido.setText("Crear Pedido");
-        jButtonCrearPedido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCrearPedidoActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jButtonCrearPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, -1, -1));
-
         jLabel8.setText("Numero de Mesa:");
         jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
 
@@ -237,24 +246,28 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         });
         jPanel2.add(jTextFieldNumeroMesa, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 170, -1));
 
-        jTextFieldTiempoApr3.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldTiempoApr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTiempoApr3ActionPerformed(evt);
+                jTextFieldTiempoAprActionPerformed(evt);
             }
         });
-        jPanel2.add(jTextFieldTiempoApr3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 170, -1));
+        jPanel2.add(jTextFieldTiempoApr, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 170, -1));
 
         jLabel11.setText("Tiempo Aproximado:");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 120, -1));
+
+        jButtonCrearPedido1.setText("Crear Pedido");
+        jButtonCrearPedido1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCrearPedido1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonCrearPedido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, -1, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 50, 510, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButtonCrearPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearPedidoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonCrearPedidoActionPerformed
 
     private void jTextFieldNombreMeseroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreMeseroActionPerformed
         // TODO add your handling code here:
@@ -268,35 +281,85 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         System.out.println("...");
         System.out.println(ArrayPlatos);
+        int numeroPedido;
+
+        if (LogPedido.Existe()) {
+            try {
+
+                objLogPedido.LeerPedido(ArrayPedidos);
+            } catch (IOException ex) {
+                Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            numeroPedido = ArrayPedidos.get(ArrayPedidos.size() - 1).getNumeroPedido() + 1;
+
+        } else {
+            numeroPedido = 1;
+        }
+        objPedido.setNumeroPedido(numeroPedido);
+
+        this.jTextFieldNumeroPedido3.setText(String.valueOf(numeroPedido));
         try {
             ArrayPlatos.removeAll(ArrayPlatos);
 
             LogPlato.LeerPlatos(ArrayPlatos);
+            jTableListaGeneral.removeAll();
+            Object columnas[] = {"Nombre", "Descripcion", "Coste", "tiempo"};
+            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+            jTableListaGeneral.setModel(modelo);
+            for (Plato objAux : ArrayPlatos) {
+                Plato objPlato = objAux;
+                String NewValor[] = {
+                    objPlato.getNombre(),
+                    objPlato.getDescripcion(),
+                    String.valueOf(objPlato.getCosto()),
+                    String.valueOf(objPlato.getTiempo())
+                };
+                modelo.addRow(NewValor);
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        jTableListaGeneral.removeAll();
-        Object columnas[] = {"Nombre","Costo","Descripcion","tiempo"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTableListaGeneral.setModel(modelo);
-        for(Plato objAux:ArrayPlatos){
-            Plato objPlato = objAux;
-            String NewValor[]={
-                objPlato.getNombre(),
-                objPlato.getDescripcion(),
-                String.valueOf(objPlato.getCosto()),
-                String.valueOf(objPlato.getTiempo())
-            };
-            modelo.addRow(NewValor);
-            
-        }
+
+
     }//GEN-LAST:event_jButtonBuscarNumero1ActionPerformed
 
     private void jButtonAgregarPlato1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarPlato1ActionPerformed
         // TODO add your handling code here:
+        jSpinnerCantidadPlato.getValue();
+        int valorSpinner = (Integer) jSpinnerCantidadPlato.getValue();
+        String observacion = jTextAreaObservacion.getText();
+
+        ArrayPlatoPedidos.removeAll(ArrayPlatoPedidos);
+        
+        objLogPedido.agregarPlatoPedido(objPedido, auxPlato, valorSpinner, 1, observacion);
+        
+        
+        objLogPedido.calcularTiempoAprox(objPedido);
+        
+        this.jTextFieldTiempoApr.setText(String.valueOf(objPedido.getTiempoAproximado()));
+        jTablePlatosPedido.removeAll();
+        
+        Object columnas[] = {"Nombre Plato", "Cantidad", "Observacion"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosPedido.setModel(modelo);
+        
+        for (PlatoPedido objLogPedido : objPedido.getListaPlatoPedido()) {
+            PlatoPedido objPedidoPla = objLogPedido;
+            String NewValor[] = {
+                objPedidoPla.getPlato().getNombre(),
+                String.valueOf(objPedidoPla.getCantidad()),
+                objPedidoPla.getObservacion()
+            };
+            System.out.println(objPedidoPla);
+            modelo.addRow(NewValor);
+
+        }
     }//GEN-LAST:event_jButtonAgregarPlato1ActionPerformed
 
     private void jTextFieldNumeroMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumeroMesaActionPerformed
@@ -307,24 +370,47 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jTextFieldTiempoApr1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTiempoApr1ActionPerformed
+    private void jTextFieldPlatoAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPlatoAgregarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTiempoApr1ActionPerformed
+    }//GEN-LAST:event_jTextFieldPlatoAgregarActionPerformed
 
-    private void jTextFieldTiempoApr3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTiempoApr3ActionPerformed
+    private void jTextFieldTiempoAprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTiempoAprActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTiempoApr3ActionPerformed
+    }//GEN-LAST:event_jTextFieldTiempoAprActionPerformed
 
     private void jTextFieldNumeroPedido3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumeroPedido3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNumeroPedido3ActionPerformed
+
+    private void jTableListaGeneralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableListaGeneralMouseClicked
+        // TODO add your handling code here:
+        rowSel = jTableListaGeneral.getSelectedRow();
+        auxPlato = ArrayPlatos.get(rowSel);
+        System.out.println(auxPlato);
+        this.jTextFieldPlatoAgregar.setText(jTableListaGeneral.getValueAt(rowSel, 0).toString());
+    }//GEN-LAST:event_jTableListaGeneralMouseClicked
+
+    private void jButtonCrearPedido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearPedido1ActionPerformed
+        int numeroMesa = Integer.parseInt(this.jTextFieldNumeroMesa.getText());
+        objPedido.setNumeroMesa(numeroMesa);
+        objPedido.setEstado(1);
+        ArrayPedidos.add(objPedido);
+        try {
+            // TODO add your handling code here:
+            objLogPedido.EscribirPedido(ArrayPedidos);
+            System.out.println(ArrayPedidos);
+        } catch (IOException ex) {
+            Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }//GEN-LAST:event_jButtonCrearPedido1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregarPlato1;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonBuscarNumero1;
-    private javax.swing.JButton jButtonCrearPedido;
+    private javax.swing.JButton jButtonCrearPedido1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -345,7 +431,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinnerCantidadPlato;
     private javax.swing.JTable jTableListaGeneral;
     private javax.swing.JTable jTablePlatosPedido;
     private javax.swing.JTextArea jTextAreaObservacion;
@@ -354,7 +440,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextFieldNombreMesero;
     private javax.swing.JTextField jTextFieldNumeroMesa;
     private javax.swing.JTextField jTextFieldNumeroPedido3;
-    private javax.swing.JTextField jTextFieldTiempoApr1;
-    private javax.swing.JTextField jTextFieldTiempoApr3;
+    private javax.swing.JTextField jTextFieldPlatoAgregar;
+    private javax.swing.JTextField jTextFieldTiempoApr;
     // End of variables declaration//GEN-END:variables
 }
