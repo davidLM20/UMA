@@ -519,6 +519,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             };
             modelo.addRow(NewValor);
         }
+        this.setVisible(false);
     }//GEN-LAST:event_jButtonListarMenusActionPerformed
 
     private void jButtonListarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarPlatosActionPerformed
