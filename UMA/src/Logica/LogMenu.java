@@ -6,6 +6,7 @@
 package Logica;
 
 import Archivos.Archivo;
+import static Logica.LogPlato.fichero;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,5 +30,10 @@ public class LogMenu {
 
     public static void InsertarMenu(ArrayList ArrayObjetos) throws IOException {
         Archivo.anhadeFichero(ArrayObjetos, fichero);
+    }
+    
+    //************************
+    public static boolean Existe(){
+        return Archivo.ExisteFichero(fichero);
     }
 }

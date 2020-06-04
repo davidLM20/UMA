@@ -14,11 +14,11 @@ import java.awt.Dimension;
 public class NewJFrame extends javax.swing.JFrame {
 
     RegistrarPlatos registrarPlatos = null;
+    AdministrarMenus administrarMenus = null;
 
     /**
      * Creates new form NewJFrame
      */
-
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
 
@@ -41,6 +41,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuGerente = new javax.swing.JMenu();
         jMenuItemRegistrarPlatos = new javax.swing.JMenuItem();
+        jMenuItemAdministrarMenu = new javax.swing.JMenuItem();
         jMenuCajero = new javax.swing.JMenu();
         jMenuMesero = new javax.swing.JMenu();
         jMenuItemCargarMenu = new javax.swing.JMenuItem();
@@ -64,6 +65,7 @@ public class NewJFrame extends javax.swing.JFrame {
         );
 
         jMenuGerente.setText("Gerente");
+
         jMenuItemRegistrarPlatos.setText("Registrar Platos");
         jMenuItemRegistrarPlatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,6 +73,14 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
         jMenuGerente.add(jMenuItemRegistrarPlatos);
+
+        jMenuItemAdministrarMenu.setText("Administrar Menus");
+        jMenuItemAdministrarMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAdministrarMenuActionPerformed(evt);
+            }
+        });
+        jMenuGerente.add(jMenuItemAdministrarMenu);
 
         jMenuBar1.add(jMenuGerente);
 
@@ -123,7 +133,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jMenuItemRegistrarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRegistrarPlatosActionPerformed
         liberar();
-        if(registrarPlatos == null){
+        if (registrarPlatos == null) {
             registrarPlatos = new RegistrarPlatos();
             jDesktopPrincipal.add(registrarPlatos);
             Dimension desktopSize = this.getSize();
@@ -133,9 +143,24 @@ public class NewJFrame extends javax.swing.JFrame {
             this.jMenuItemRegistrarPlatos.setEnabled(true);
         }
     }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
-    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt){
 
+    private void jMenuItemAdministrarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAdministrarMenuActionPerformed
+        liberar();
+        if (administrarMenus == null) {
+            administrarMenus = new AdministrarMenus();
+            jDesktopPrincipal.add(administrarMenus);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = administrarMenus.getSize();
+            administrarMenus.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            administrarMenus.setVisible(true);
+        }
+    }//GEN-LAST:event_jMenuItemAdministrarMenuActionPerformed
+    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
+        
+        
+        
     }
+
     private void jMenuItemRegistroPedidoActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
 
@@ -144,11 +169,13 @@ public class NewJFrame extends javax.swing.JFrame {
             jDesktopPrincipal.add(rPedido);
             rPedido.setVisible(true);
 
+        } else if (rPedido.isClosed()) {
+            rPedido = new RegistrarPedido();
+            jDesktopPrincipal.add(rPedido);
+            rPedido.setVisible(true);
         }
 
-
     }
-
 
     /**
      * @param args the command line arguments
@@ -190,6 +217,10 @@ public class NewJFrame extends javax.swing.JFrame {
             registrarPlatos.dispose();
             registrarPlatos = null;
         }
+        if (administrarMenus != null) {
+            administrarMenus.dispose();;
+            administrarMenus = null;
+        }
     }
 
 
@@ -199,12 +230,12 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCajero;
     private javax.swing.JMenu jMenuGerente;
-
-    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
-    private javax.swing.JMenuItem  jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItemAdministrarMenu;
+    private javax.swing.JMenuItem jMenuItemAgregarPlato;
     private javax.swing.JMenuItem jMenuItemCargarMenu;
+    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
     private javax.swing.JMenuItem jMenuItemRegistroPedido;
-    private javax.swing.JMenuItem  jMenuItemAgregarPlato;
     private javax.swing.JMenu jMenuMesero;
     // End of variables declaration//GEN-END:variables
 }
