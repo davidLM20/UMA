@@ -56,4 +56,9 @@ public class LogPlato {
         Archivo.anhadeFichero(ArrayObjetos,fichero);
     }
     
+    
+    //****************************************************************************
+    public static boolean Existe(){
+        return Archivo.ExisteFichero(fichero);
+    }
 }
