@@ -5,6 +5,16 @@
  */
 package GUI;
 
+import CLases.Pedido;
+import CLases.Plato;
+import CLases.PlatoPedido;
+import static GUI.RegistrarPedido.objPedido;
+import Logica.LogPedido;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author David Lopez
@@ -14,7 +24,16 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
     /**
      * Creates new form AgregarPlato
      */
-    public AgregarPlato() {
+    static ArrayList<Pedido> ArrayPedidos = new ArrayList<>();
+    static ArrayList<Plato> ArrayPlatos = new ArrayList<>();
+    static ArrayList<PlatoPedido> ArrayPlatoPedidos = new ArrayList<>();
+
+    static LogPedido objLogPedido = new LogPedido();
+
+    int rowSel = -1;
+
+    public AgregarPlato() throws IOException, FileNotFoundException, ClassNotFoundException {
+        objLogPedido.LeerPedido(ArrayPedidos);
         initComponents();
     }
 
@@ -37,22 +56,19 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTablePlatos = new javax.swing.JTable();
+        jTablePlatosdisponibles = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jTextFieldTiempoApr = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
         jButtonAgregarPlato2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButtonBuscar1 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextAreaObservacion = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTablePedidoActual1 = new javax.swing.JTable();
+        jTablePedidoAdicionales = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         jButtonAgregarPlato1 = new javax.swing.JButton();
 
@@ -73,6 +89,11 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         jPanel1.add(jTextFieldBusquedaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 80, -1));
 
         jButtonBuscar.setText("Buscar");
+        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
 
         jLabel2.setText("Platos del pedido");
@@ -89,6 +110,11 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTablePedidoActual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePedidoActualMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTablePedidoActual);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 150));
@@ -101,7 +127,7 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTablePlatos.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePlatosdisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -112,12 +138,12 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTablePlatos);
+        jScrollPane2.setViewportView(jTablePlatosdisponibles);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 150));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, 150));
 
         jLabel4.setText("Platos disponibles");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
 
         jTextFieldTiempoApr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,13 +153,13 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         jPanel2.add(jTextFieldTiempoApr, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 160, -1));
 
         jLabel5.setText("Cantidad:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 8, 1));
-        jPanel2.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, -1));
+        jPanel2.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, -1, -1));
 
         jLabel10.setText("Plato por agregar");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
         jButtonAgregarPlato2.setText("Agregar Plato");
         jButtonAgregarPlato2.addActionListener(new java.awt.event.ActionListener() {
@@ -143,34 +169,21 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         });
         jPanel2.add(jButtonAgregarPlato2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 180, -1));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 140, -1));
-
-        jButtonBuscar1.setText("Buscar");
-        jPanel2.add(jButtonBuscar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, -1, -1));
-
         jTextAreaObservacion.setColumns(20);
         jTextAreaObservacion.setRows(5);
         jScrollPane4.setViewportView(jTextAreaObservacion);
 
-        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 420, 330, -1));
+        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 400, 330, -1));
 
         jLabel11.setText("Observacion:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, -1, 20));
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, -1, 20));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 510, 620));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTablePedidoActual1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePedidoAdicionales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -181,7 +194,7 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTablePedidoActual1);
+        jScrollPane3.setViewportView(jTablePedidoAdicionales);
 
         jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, 130));
 
@@ -217,17 +230,51 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonAgregarPlato2ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        int busquedaPedido = Integer.parseInt(jTextFieldBusquedaPedido.getText());
+        Pedido objNumeroPedido = new Pedido();
+        objNumeroPedido.setNumeroPedido(busquedaPedido);
+        LogPedido objLogPedidoAux = new LogPedido();
+
+        Pedido objPedido = objLogPedidoAux.BuscarPedido(ArrayPedidos, objNumeroPedido);
+        
+        System.out.println("***");
+        System.out.println(objPedido);
+        
+        jTablePedidoActual.removeAll();
+        Object columnas[] = {"Nombre Plato", "Cantidad", "Observacion"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePedidoActual.setModel(modelo);
+        
+        if (objLogPedido.CompararPedido(objPedido, objNumeroPedido)) {
+
+            for (PlatoPedido objPlatoPedido : objPedido.getListaPlatoPedido()) {
+                PlatoPedido objPlatoPedidoAux = objPlatoPedido;
+                String NewValor[] = {
+                    objPlatoPedidoAux.getPlato().getNombre(),
+                    String.valueOf(objPlatoPedidoAux.getCantidad()),
+                    objPlatoPedidoAux.getObservacion()
+                };
+                System.out.println(objPlatoPedidoAux);
+                modelo.addRow(NewValor);
+            }
+
+        }
+
+
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jTablePedidoActualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePedidoActualMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jTablePedidoActualMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregarPlato1;
     private javax.swing.JButton jButtonAgregarPlato2;
     private javax.swing.JButton jButtonBuscar;
-    private javax.swing.JButton jButtonBuscar1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -245,10 +292,9 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTablePedidoActual;
-    private javax.swing.JTable jTablePedidoActual1;
-    private javax.swing.JTable jTablePlatos;
+    private javax.swing.JTable jTablePedidoAdicionales;
+    private javax.swing.JTable jTablePlatosdisponibles;
     private javax.swing.JTextArea jTextAreaObservacion;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldBusquedaPedido;
     private javax.swing.JTextField jTextFieldTiempoApr;
     // End of variables declaration//GEN-END:variables

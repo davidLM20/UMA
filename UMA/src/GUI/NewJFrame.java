@@ -6,6 +6,9 @@
 package GUI;
 
 import java.awt.Dimension;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,6 +23,7 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
+    AgregarPlato agregarPlato;
 
     public NewJFrame() {
         initComponents();
@@ -63,6 +67,7 @@ public class NewJFrame extends javax.swing.JFrame {
         );
 
         jMenuGerente.setText("Gerente");
+
         jMenuItemRegistrarPlatos.setText("Registrar Platos");
         jMenuItemRegistrarPlatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,6 +100,11 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuMesero.add(jMenuItemRegistroPedido);
 
         jMenuItemAgregarPlato.setText("AgregarPlato");
+        jMenuItemAgregarPlato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAgregarPlatoActionPerformed(evt);
+            }
+        });
         jMenuMesero.add(jMenuItemAgregarPlato);
 
         jMenuBar1.add(jMenuMesero);
@@ -133,6 +143,32 @@ public class NewJFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
+
+    private void jMenuItemAgregarPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAgregarPlatoActionPerformed
+        // TODO add your handling code here:
+        if (agregarPlato == null) {
+            try {
+                agregarPlato = new AgregarPlato();
+            } catch (IOException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDesktopPrincipal.add(agregarPlato);
+            agregarPlato.setVisible(true);
+
+        } else if (agregarPlato.isClosed()) {
+            try {
+                agregarPlato = new AgregarPlato();
+            } catch (IOException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDesktopPrincipal.add(agregarPlato);
+            agregarPlato.setVisible(true);
+        }       
+    }//GEN-LAST:event_jMenuItemAgregarPlatoActionPerformed
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
 
     }
@@ -202,12 +238,11 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCajero;
     private javax.swing.JMenu jMenuGerente;
-
-    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
-    private javax.swing.JMenuItem  jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItemAgregarPlato;
     private javax.swing.JMenuItem jMenuItemCargarMenu;
+    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
     private javax.swing.JMenuItem jMenuItemRegistroPedido;
-    private javax.swing.JMenuItem  jMenuItemAgregarPlato;
     private javax.swing.JMenu jMenuMesero;
     // End of variables declaration//GEN-END:variables
 }
