@@ -63,9 +63,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jButtonAgregarPlato1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jSpinnerCantidadPlato = new javax.swing.JSpinner();
-        jButtonBuscar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jTextFieldPlatoAgregar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -117,7 +114,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 740, 10));
 
         jLabel4.setText("Codigo Pedido:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
 
         jTextFieldCodigoGeneral.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,19 +170,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
 
         jSpinnerCantidadPlato.setModel(new javax.swing.SpinnerNumberModel(1, 1, 8, 1));
         jPanel1.add(jSpinnerCantidadPlato, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, -1, -1));
-
-        jButtonBuscar.setText("Buscar");
-        jPanel1.add(jButtonBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 150, -1, -1));
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 180, -1));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 140, -1));
 
         jTextFieldPlatoAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -366,10 +350,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNumeroMesaActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
     private void jTextFieldPlatoAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPlatoAgregarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldPlatoAgregarActionPerformed
@@ -408,10 +388,8 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregarPlato1;
-    private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonBuscarNumero1;
     private javax.swing.JButton jButtonCrearPedido1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -435,7 +413,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTableListaGeneral;
     private javax.swing.JTable jTablePlatosPedido;
     private javax.swing.JTextArea jTextAreaObservacion;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldCodigoGeneral;
     private javax.swing.JTextField jTextFieldNombreMesero;
     private javax.swing.JTextField jTextFieldNumeroMesa;
