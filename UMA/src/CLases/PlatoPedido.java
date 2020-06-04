@@ -14,9 +14,29 @@ public class PlatoPedido {
 
     public int cantidad;
     public int estado;
+    public String observacion;
     public Plato plato;
 
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
     public PlatoPedido() {
+    }
+
+    public PlatoPedido(int estado) {
+        this.estado = estado;
+    }
+
+    public PlatoPedido(int cantidad, int estado, String observacion, Plato plato) {
+        this.cantidad = cantidad;
+        this.estado = estado;
+        this.observacion = observacion;
+        this.plato = plato;
     }
 
     public PlatoPedido(int cantidad, int estado, Plato plato) {

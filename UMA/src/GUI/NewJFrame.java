@@ -6,6 +6,9 @@
 package GUI;
 
 import java.awt.Dimension;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +24,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
-
+    DespachoPedidoCocinero dPedido = null;
     public NewJFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -47,6 +50,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuItemRegistroPedido = new javax.swing.JMenuItem();
         jMenuItemAgregarPlato = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
+        jMenuCocineroDespachoPedido = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -64,6 +68,7 @@ public class NewJFrame extends javax.swing.JFrame {
         );
 
         jMenuGerente.setText("Gerente");
+
         jMenuItemRegistrarPlatos.setText("Registrar Platos");
         jMenuItemRegistrarPlatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,6 +106,15 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuBar1.add(jMenuMesero);
 
         jMenu1.setText("Cocinero");
+
+        jMenuCocineroDespachoPedido.setText("Despacho Pedido");
+        jMenuCocineroDespachoPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuCocineroDespachoPedidoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuCocineroDespachoPedido);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -133,6 +147,26 @@ public class NewJFrame extends javax.swing.JFrame {
             this.jMenuItemRegistrarPlatos.setEnabled(true);
         }
     }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
+
+    private void jMenuCocineroDespachoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCocineroDespachoPedidoActionPerformed
+        liberar();
+        if (dPedido == null) {
+            try {
+                dPedido = new DespachoPedidoCocinero();
+            } catch (IOException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDesktopPrincipal.add(dPedido);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = dPedido.getSize();
+            dPedido.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            dPedido.setVisible(true);
+            this.jMenuCocineroDespachoPedido.setEnabled(true);
+
+        } 
+    }//GEN-LAST:event_jMenuCocineroDespachoPedidoActionPerformed
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt){
 
     }
@@ -198,13 +232,13 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCajero;
+    private javax.swing.JMenuItem jMenuCocineroDespachoPedido;
     private javax.swing.JMenu jMenuGerente;
-
-    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
-    private javax.swing.JMenuItem  jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItemAgregarPlato;
     private javax.swing.JMenuItem jMenuItemCargarMenu;
+    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
     private javax.swing.JMenuItem jMenuItemRegistroPedido;
-    private javax.swing.JMenuItem  jMenuItemAgregarPlato;
     private javax.swing.JMenu jMenuMesero;
     // End of variables declaration//GEN-END:variables
 }

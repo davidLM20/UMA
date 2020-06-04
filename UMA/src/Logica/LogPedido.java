@@ -11,6 +11,7 @@ import CLases.Mesero;
 import CLases.Pedido;
 import CLases.Plato;
 import CLases.PlatoPedido;
+import static Logica.LogPlato.fichero;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,5 +70,9 @@ public class LogPedido {
     }
     public static void InsertarPedido(ArrayList ArrayObjetos) throws IOException {
         Archivo.anhadeFichero(ArrayObjetos,fichero);
+    }
+    
+    public static boolean Existe(){
+        return Archivo.ExisteFichero(fichero);
     }
 }
