@@ -73,6 +73,35 @@ public class LogPedido {
 
 
 
+    
+    //**********************
+    
+    public Pedido BuscarPedido(ArrayList<Pedido> ArrayPedidos, Pedido objPedidoNumeroPedido) {
+        Pedido objAux = new Pedido(); 
+// 
+        for (Pedido objPedidoNumPedido : ArrayPedidos) {
+            int intNum = objPedidoNumPedido.getNumeroPedido();
+            System.out.println(intNum);
+            if (intNum == objPedidoNumeroPedido.getNumeroPedido()) {
+                objAux = objPedidoNumPedido;
+                System.out.println("////");
+                System.out.println(objAux);
+                break;
+            }
+        }
+
+        return objAux;
+    }
+    
+    public boolean CompararPedido(Pedido objPriemerPedido, Pedido objSegundoPedido) {
+        if (objPriemerPedido.getNumeroPedido()== objSegundoPedido.getNumeroPedido()) {
+            return true;
+        }
+        return false;
+    }
+    
+    
+    
     //************************
     public static void EscribirPedido(ArrayList ArrayObjetos) throws IOException {
         Archivo.escribir(ArrayObjetos, fichero);
