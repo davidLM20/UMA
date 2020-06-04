@@ -131,6 +131,7 @@ public class NewJFrame extends javax.swing.JFrame {
             registrarPlatos.setVisible(true);
             this.jMenuItemRegistrarPlatos.setEnabled(true);
         }
+        
     }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
 
