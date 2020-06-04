@@ -313,8 +313,7 @@ public class UMA {
             System.out.println("Seleccione la cantidad del mismo");
             int n = sc.nextInt();
 
-            objLogPedido.agregarPlatoPedido(objPedido, ArrayPlatos.get(x - 1), n);
-
+//          objLogPedido.agregarPlatoPedido(objPedido, ArrayPlatos.get(x - 1), n);
             System.out.println("\n¿Quiere seguir?\n");
             System.out.println("Presione: S para continuar o N para regresar al menu");
             tecla = new Scanner(System.in).nextLine();
@@ -375,10 +374,10 @@ public class UMA {
         double coste = sc.nextDouble();
         System.out.println("Ingrese el tiempo aproximado del plato(plato)");
         double tiempo = sc.nextDouble();
-        
+
         Plato objPlato = new Plato();
-        
-        ArrayPlatos.add(new Plato(nombre,descripcion,coste,tiempo));
+
+        ArrayPlatos.add(new Plato(nombre, descripcion, coste, tiempo));
         objLogPlato.EscribirPlatos(ArrayPlatos);
         //ArrayPlatos.add(plato);
 

@@ -18,7 +18,6 @@ public class NewJFrame extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
 
@@ -123,7 +122,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jMenuItemRegistrarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRegistrarPlatosActionPerformed
         liberar();
-        if(registrarPlatos == null){
+        if (registrarPlatos == null) {
             registrarPlatos = new RegistrarPlatos();
             jDesktopPrincipal.add(registrarPlatos);
             Dimension desktopSize = this.getSize();
@@ -133,9 +132,10 @@ public class NewJFrame extends javax.swing.JFrame {
             this.jMenuItemRegistrarPlatos.setEnabled(true);
         }
     }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
-    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt){
+    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
 
     }
+
     private void jMenuItemRegistroPedidoActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
 
@@ -144,11 +144,13 @@ public class NewJFrame extends javax.swing.JFrame {
             jDesktopPrincipal.add(rPedido);
             rPedido.setVisible(true);
 
+        } else if (rPedido.isClosed()) {
+            rPedido = new RegistrarPedido();
+            jDesktopPrincipal.add(rPedido);
+            rPedido.setVisible(true);
         }
 
-
     }
-
 
     /**
      * @param args the command line arguments

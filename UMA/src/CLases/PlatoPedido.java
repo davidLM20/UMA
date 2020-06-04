@@ -15,14 +15,16 @@ public class PlatoPedido {
     public int cantidad;
     public int estado;
     public Plato plato;
-
+    public String observacion;
+    
     public PlatoPedido() {
     }
 
-    public PlatoPedido(int cantidad, int estado, Plato plato) {
+    public PlatoPedido(int cantidad, int estado, Plato plato, String observacion) {
         this.cantidad = cantidad;
         this.estado = estado;
-        this.plato = plato;
+        this.plato = plato;        
+        this.observacion = observacion;
     }
 
     public int getCantidad() {
@@ -49,10 +51,21 @@ public class PlatoPedido {
         this.plato = plato;
     }
 
+    
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
     @Override
     public String toString() {
-        return "PlatoPedido{" + "cantidad=" + cantidad + ", estado=" + estado + ", plato=" + plato + '}';
+        return "PlatoPedido{" + "cantidad=" + cantidad + ", estado=" + estado + ", plato=" + plato +  ", observacion=" + observacion + '}';
     }
-  
+
+    
 
 }
