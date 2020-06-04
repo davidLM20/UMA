@@ -13,6 +13,16 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Gerente"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRegistrarPlatos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Registrar Platos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRegistrarPlatosActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuCajero">
           <Properties>

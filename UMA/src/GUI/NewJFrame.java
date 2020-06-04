@@ -5,19 +5,23 @@
  */
 package GUI;
 
+import java.awt.Dimension;
+
 /**
  *
  * @author David Lopez
  */
 public class NewJFrame extends javax.swing.JFrame {
 
+    RegistrarPlatos registrarPlatos = null;
+
     /**
      * Creates new form NewJFrame
      */
-    
+
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
-    
+
     public NewJFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -36,6 +40,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jDesktopPrincipal = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuGerente = new javax.swing.JMenu();
+        jMenuItemRegistrarPlatos = new javax.swing.JMenuItem();
         jMenuCajero = new javax.swing.JMenu();
         jMenuMesero = new javax.swing.JMenu();
         jMenuItemCargarMenu = new javax.swing.JMenuItem();
@@ -59,6 +64,14 @@ public class NewJFrame extends javax.swing.JFrame {
         );
 
         jMenuGerente.setText("Gerente");
+        jMenuItemRegistrarPlatos.setText("Registrar Platos");
+        jMenuItemRegistrarPlatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRegistrarPlatosActionPerformed(evt);
+            }
+        });
+        jMenuGerente.add(jMenuItemRegistrarPlatos);
+
         jMenuBar1.add(jMenuGerente);
 
         jMenuCajero.setText("Cajero");
@@ -108,33 +121,35 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCargarMenuActionPerformed
-        // TODO add your handling code here:
-        
-        if (mCmenu == null) {
-            mCmenu = new MeseroCargarMenu();
-            jDesktopPrincipal.add(mCmenu);
-            mCmenu.setVisible(true);
-            
+    private void jMenuItemRegistrarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRegistrarPlatosActionPerformed
+        liberar();
+        if(registrarPlatos == null){
+            registrarPlatos = new RegistrarPlatos();
+            jDesktopPrincipal.add(registrarPlatos);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = registrarPlatos.getSize();
+            registrarPlatos.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            registrarPlatos.setVisible(true);
+            this.jMenuItemRegistrarPlatos.setEnabled(true);
         }
-        
-        
-    }//GEN-LAST:event_jMenuItemCargarMenuActionPerformed
+    }//GEN-LAST:event_jMenuItemRegistrarPlatosActionPerformed
+    private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt){
 
-    private void jMenuItemRegistroPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRegistroPedidoActionPerformed
+    }
+    private void jMenuItemRegistroPedidoActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        
+
         if (rPedido == null) {
             rPedido = new RegistrarPedido();
             jDesktopPrincipal.add(rPedido);
             rPedido.setVisible(true);
-            
-        }
-        
-        
-    }//GEN-LAST:event_jMenuItemRegistroPedidoActionPerformed
 
-    
+        }
+
+
+    }
+
+
     /**
      * @param args the command line arguments
      */
@@ -142,7 +157,7 @@ public class NewJFrame extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -170,16 +185,26 @@ public class NewJFrame extends javax.swing.JFrame {
         });
     }
 
+    public void liberar() {
+        if (registrarPlatos != null) {
+            registrarPlatos.dispose();
+            registrarPlatos = null;
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPrincipal;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCajero;
     private javax.swing.JMenu jMenuGerente;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItemAgregarPlato;
+
+    private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
+    private javax.swing.JMenuItem  jMenuItem1;
     private javax.swing.JMenuItem jMenuItemCargarMenu;
     private javax.swing.JMenuItem jMenuItemRegistroPedido;
+    private javax.swing.JMenuItem  jMenuItemAgregarPlato;
     private javax.swing.JMenu jMenuMesero;
     // End of variables declaration//GEN-END:variables
 }
