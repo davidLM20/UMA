@@ -35,12 +35,15 @@ public class LogPedido {
     }
 
     public static void calcularTiempoAprox(Pedido pedido) {
+        System.out.println("skdfjlsdkj");
         double tiempoTotal = calcularTiempoTotal(pedido);
         double sumatoria = 0.00;
         int n = 0;
         for (PlatoPedido objPlatoPedido : pedido.listaPlatoPedido) {
             Plato plato = objPlatoPedido.getPlato();
-            double peso = calcularPesoPlato(plato, tiempoTotal);
+
+            double peso = calcularPesoPlato(objPlatoPedido, tiempoTotal);
+
 
             System.out.println(peso);
 
@@ -50,20 +53,20 @@ public class LogPedido {
             System.out.println(sumatoria);
 
         }
-        pedido.setTiempoAproximado((sumatoria + calcularTiempoTotal(pedido)) / n);
+        pedido.setTiempoAproximado((sumatoria+tiempoTotal)/2);
 
     }
 
     public static double calcularTiempoTotal(Pedido pedido) {
         double tiempoTotal = 0.00;
         for (PlatoPedido platoPedido : pedido.listaPlatoPedido) {
-            tiempoTotal += platoPedido.getPlato().getTiempo();
+            tiempoTotal += platoPedido.getPlato().getTiempo()+ ((2 * platoPedido.getCantidad()) - 2);
         }
         return tiempoTotal;
     }
 
-    public static double calcularPesoPlato(Plato plato, double tiempoTotal) {
-        double peso = plato.tiempo / tiempoTotal;
+    public static double calcularPesoPlato(PlatoPedido platoPedido, double tiempoTotal) {
+        double peso = (platoPedido.getPlato().getTiempo() + ((2 * platoPedido.getCantidad()) - 2)) / tiempoTotal;
         return peso;
     }
 
