@@ -170,23 +170,16 @@ public class NewJFrame extends javax.swing.JFrame {
 
 
 
-    private void jMenuCocineroDespachoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCocineroDespachoPedidoActionPerformed
+    private void jMenuCocineroDespachoPedidoActionPerformed(java.awt.event.ActionEvent evt) {
         liberar();
         if (dPedido == null) {
             try {
                 dPedido = new DespachoPedidoCocinero();
-    private void jMenuItemAgregarPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAgregarPlatoActionPerformed
-        // TODO add your handling code here:
-        if (agregarPlato == null) {
-            try {
-                agregarPlato = new AgregarPlato();
-
             } catch (IOException ex) {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             jDesktopPrincipal.add(dPedido);
             Dimension desktopSize = this.getSize();
             Dimension FrameSize = dPedido.getSize();
@@ -195,7 +188,33 @@ public class NewJFrame extends javax.swing.JFrame {
             this.jMenuCocineroDespachoPedido.setEnabled(true);
 
         }
-    }//GEN-LAST:event_jMenuCocineroDespachoPedidoActionPerformed
+    }
+            
+   private void jMenuItemAgregarPlatoActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        if (agregarPlato == null) {
+            try {
+                agregarPlato = new AgregarPlato();
+            } catch (IOException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDesktopPrincipal.add(agregarPlato);
+            agregarPlato.setVisible(true);
+
+        } else if (agregarPlato.isClosed()) {
+            try {
+                agregarPlato = new AgregarPlato();
+            } catch (IOException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jDesktopPrincipal.add(agregarPlato);
+            agregarPlato.setVisible(true);
+        }
+    }                                                        
 
 
     private void jMenuItemAdministrarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAdministrarMenuActionPerformed
@@ -210,21 +229,7 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItemAdministrarMenuActionPerformed
 
-            jDesktopPrincipal.add(agregarPlato);
-            agregarPlato.setVisible(true);
-
-        } else if (agregarPlato.isClosed()) {
-            try {
-                agregarPlato = new AgregarPlato();
-            } catch (IOException ex) {
-                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            jDesktopPrincipal.add(agregarPlato);
-            agregarPlato.setVisible(true);
-        }       
-    }//GEN-LAST:event_jMenuItemAgregarPlatoActionPerformed
+                                                                 
 
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
 
