@@ -336,19 +336,19 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         String observacion = jTextAreaObservacion.getText();
 
         ArrayPlatoPedidos.removeAll(ArrayPlatoPedidos);
-
+        
         objLogPedido.agregarPlatoPedido(objPedido, auxPlato, valorSpinner, 1, observacion);
-
+        
+        
         objLogPedido.calcularTiempoAprox(objPedido);
         
         this.jTextFieldTiempoApr.setText(String.valueOf(objPedido.getTiempoAproximado()));
-        
         jTablePlatosPedido.removeAll();
-
+        
         Object columnas[] = {"Nombre Plato", "Cantidad", "Observacion"};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
         jTablePlatosPedido.setModel(modelo);
-
+        
         for (PlatoPedido objLogPedido : objPedido.getListaPlatoPedido()) {
             PlatoPedido objPedidoPla = objLogPedido;
             String NewValor[] = {
@@ -391,10 +391,18 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTableListaGeneralMouseClicked
 
     private void jButtonCrearPedido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearPedido1ActionPerformed
-        // TODO add your handling code here:
-        
-        
-        
+        int numeroMesa = Integer.parseInt(this.jTextFieldNumeroMesa.getText());
+        objPedido.setNumeroMesa(numeroMesa);
+        objPedido.setEstado(1);
+        ArrayPedidos.add(objPedido);
+        try {
+            // TODO add your handling code here:
+            objLogPedido.EscribirPedido(ArrayPedidos);
+            System.out.println(ArrayPedidos);
+        } catch (IOException ex) {
+            Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }//GEN-LAST:event_jButtonCrearPedido1ActionPerformed
 
 

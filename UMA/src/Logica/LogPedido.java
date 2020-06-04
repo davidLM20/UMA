@@ -41,12 +41,12 @@ public class LogPedido {
         for (PlatoPedido objPlatoPedido : pedido.listaPlatoPedido) {
             Plato plato = objPlatoPedido.getPlato();
             double peso = calcularPesoPlato(plato, tiempoTotal);
-            
+
             System.out.println(peso);
-            
-           sumatoria += ((plato.getTiempo() + ((2 * objPlatoPedido.getCantidad())-2)) * peso);
+
+            sumatoria += ((plato.getTiempo() + ((2 * objPlatoPedido.getCantidad()) - 2)) * peso);
             n += 1;
-            
+
             System.out.println(sumatoria);
 
         }
