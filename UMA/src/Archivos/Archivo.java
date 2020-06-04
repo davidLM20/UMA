@@ -8,6 +8,7 @@ package Archivos;
 
 import Logica.MiObjectOutputStream;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -45,6 +46,7 @@ public class Archivo {
                     ArrayObjetos.add(aux);
                 }
                 //sout de prueba
+                
                 System.out.println(aux.toString());
                 aux = ois.readObject();
             }
@@ -84,6 +86,12 @@ public class Archivo {
             e.printStackTrace();
         }
 
+    }
+    
+    //**************************************************************************
+    public static boolean ExisteFichero(String fichero){
+        File f = new File(fichero);
+        return f.exists();
     }
     
     

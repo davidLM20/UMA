@@ -28,11 +28,11 @@ public class LogCocinero {
     }
   
     public Cocinero CrearCocinero(int platosRealizados, String codigo, String horario, double sueldo, String cedula, String nombre, String apellido, String direccion, String celular) {
-        Cocinero objCajero = new Cocinero(platosRealizados, codigo, horario, sueldo, cedula, nombre, apellido, direccion, celular);
-        return objCajero;
+        Cocinero objCocinero = new Cocinero(platosRealizados, codigo, horario, sueldo, cedula, nombre, apellido, direccion, celular);
+        return objCocinero;
     }
 
-    public void EliminarCajero(ArrayList<Cocinero> ArrayCocinero, Cocinero cocinero) throws IOException {
+    public void EliminarCocinero(ArrayList<Cocinero> ArrayCocinero, Cocinero cocinero) throws IOException {
         ArrayCocinero.remove(cocinero);
         objDataCocinero.GuardarArchivoCocinero(ArrayCocinero);
     }
@@ -45,14 +45,14 @@ public class LogCocinero {
 
     //************************
     
-    public static void EscribirCajero(ArrayList ArrayObjetos) throws IOException {
-        Archivo.escribir(ArrayObjetos,fichero );
-    }
-
-    public static void LeerCajero(ArrayList ArrayObjetos) throws IOException, FileNotFoundException, ClassNotFoundException {
-        Archivo.leer(ArrayObjetos,fichero);
-    }
-    public static void InsertarCajero(ArrayList ArrayObjetos) throws IOException {
-        Archivo.anhadeFichero(ArrayObjetos,fichero);
-    }
+//    public static void EscribirCajero(ArrayList ArrayObjetos) throws IOException {
+//        Archivo.escribir(ArrayObjetos,fichero );
+//    }
+//
+//    public static void LeerCajero(ArrayList ArrayObjetos) throws IOException, FileNotFoundException, ClassNotFoundException {
+//        Archivo.leer(ArrayObjetos,fichero);
+//    }
+//    public static void InsertarCajero(ArrayList ArrayObjetos) throws IOException {
+//        Archivo.anhadeFichero(ArrayObjetos,fichero);
+//    }
 }
