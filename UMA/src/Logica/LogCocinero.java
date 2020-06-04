@@ -42,6 +42,14 @@ public class LogCocinero {
         objDataCocinero.GuardarArchivosCocinero(objCocinero);
 
     }
+    public static ArrayList CargarCocinero() throws IOException, FileNotFoundException, ClassNotFoundException{
+        ArrayList<Cocinero> listaCocineros = new ArrayList<Cocinero>();
+        Archivo.leer(listaCocineros, fichero);
+        
+        return listaCocineros;
+    } 
+
+    
 
     //************************
     
@@ -49,9 +57,9 @@ public class LogCocinero {
 //        Archivo.escribir(ArrayObjetos,fichero );
 //    }
 //
-//    public static void LeerCajero(ArrayList ArrayObjetos) throws IOException, FileNotFoundException, ClassNotFoundException {
-//        Archivo.leer(ArrayObjetos,fichero);
-//    }
+    public static void LeerCocinero(ArrayList ArrayObjetos) throws IOException, FileNotFoundException, ClassNotFoundException {
+        Archivo.leer(ArrayObjetos,fichero);
+    }
 //    public static void InsertarCajero(ArrayList ArrayObjetos) throws IOException {
 //        Archivo.anhadeFichero(ArrayObjetos,fichero);
 //    }

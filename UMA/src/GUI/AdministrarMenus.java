@@ -5,11 +5,34 @@
  */
 package GUI;
 
+import CLases.Menu;
+import CLases.Plato;
+import Logica.LogMenu;
+import Logica.LogPlato;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author USUARIO
  */
 public class AdministrarMenus extends javax.swing.JInternalFrame {
+
+    LogPlato objLogPlato = new LogPlato();
+    ArrayList<Plato> ArrayPlatos = new ArrayList<Plato>();
+
+    LogMenu objLogMenu = new LogMenu();
+    ArrayList<Menu> ArrayMenu = new ArrayList<Menu>();
+
+    int rowSelPlato = -1;
+    int rowSelMenu = -1;
+    int rowSelPlatoMenu = -1;
 
     /**
      * Creates new form AdministrarMenus
@@ -28,11 +51,11 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableListaMenus = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTablePlatosMenu = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTableListaPlatos = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -65,15 +88,15 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
         jRadioButtonJulio = new javax.swing.JRadioButton();
         jRadioButtonAgosto = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButtonCrearMenu = new javax.swing.JButton();
+        jButtonListarMenus = new javax.swing.JButton();
+        jButtonListarPlatos = new javax.swing.JButton();
+        jButtonAgregarMenu = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableListaMenus.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -85,12 +108,17 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Nombre", "Descripcion", "Dias", "Title 4"
+                "Nombre", "Descripcion", "Dias", "Meses"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTableListaMenus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableListaMenusMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableListaMenus);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePlatosMenu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -105,9 +133,9 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                 "Nombre", "Costo", "Descripcion", "Tiempo Aprox."
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(jTablePlatosMenu);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jTableListaPlatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -122,7 +150,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                 "Nombre", "Costo", "Descripcion", "Tiempo Aprox."
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(jTableListaPlatos);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -193,7 +221,12 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Meses");
 
-        jButton1.setText("Crear Menu");
+        jButtonCrearMenu.setText("Crear Menu");
+        jButtonCrearMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCrearMenuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -254,7 +287,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButtonCrearMenu)
                         .addGap(37, 37, 37))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
@@ -327,18 +360,28 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jRadioButtonDiciembre)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(jButtonCrearMenu)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Listar Menus");
-
-        jButton3.setText("Listar Platos");
-
-        jButton4.setText("Agregar al menu seleccionado");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButtonListarMenus.setText("Listar Menus");
+        jButtonListarMenus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonListarMenusActionPerformed(evt);
+            }
+        });
+
+        jButtonListarPlatos.setText("Listar Platos");
+        jButtonListarPlatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonListarPlatosActionPerformed(evt);
+            }
+        });
+
+        jButtonAgregarMenu.setText("Agregar al menu seleccionado");
+        jButtonAgregarMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAgregarMenuActionPerformed(evt);
             }
         });
 
@@ -354,7 +397,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addComponent(jButtonAgregarMenu)
                 .addGap(206, 206, 206))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -370,19 +413,17 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel10)
                                         .addGap(298, 298, 298)
-                                        .addComponent(jButton2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)))
+                                        .addComponent(jButtonListarMenus))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jLabel8)
                                         .addGap(302, 302, 302)
-                                        .addComponent(jButton3)
+                                        .addComponent(jButtonListarPlatos)
                                         .addGap(88, 88, 88))
                                     .addComponent(jScrollPane3))))
-                        .addContainerGap(24, Short.MAX_VALUE))
+                        .addContainerGap(49, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -392,8 +433,8 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
+                    .addComponent(jButtonListarMenus)
+                    .addComponent(jButtonListarPlatos)
                     .addComponent(jLabel8)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -401,7 +442,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(jButtonAgregarMenu)
                 .addGap(5, 5, 5)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -415,23 +456,217 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButtonLunesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonLunesActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jRadioButtonLunesActionPerformed
 
     private void jRadioButtonMartesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMartesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButtonMartesActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButtonAgregarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarMenuActionPerformed
+        //Plato seleccionado par agregar
+        rowSelPlato = jTableListaPlatos.getSelectedRow();
+        Plato objAuxPlato = ArrayPlatos.get(rowSelPlato);
+        //Menu seleccionado para gregarlo
+        rowSelMenu = jTableListaMenus.getSelectedRow();
+        Menu objAuxMenu = ArrayMenu.get(rowSelMenu);
+        objAuxMenu.listaPlatosMenu.add(objAuxPlato);
+        //System.out.println(objAuxMenu);
+        ArrayMenu.set(rowSelMenu, objAuxMenu);
+        //System.out.println(ArrayMenu);
+        try {
+            objLogMenu.EscribirMenu(ArrayMenu);
+        } catch (IOException ex) {
+            Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.jTablePlatosMenu.removeAll();
+        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Aprox."};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosMenu.setModel(modelo);
+        for (Plato objAux : ArrayMenu.get(rowSelMenu).listaPlatosMenu) {
+            String NewValor[] = {
+                objAux.getNombre(),
+                String.valueOf(objAux.getCosto()),
+                objAux.getDescripcion(),
+                String.valueOf(objAux.getTiempo())
+            };
+            modelo.addRow(NewValor);
+        }
+    }//GEN-LAST:event_jButtonAgregarMenuActionPerformed
 
+    private void jButtonListarMenusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarMenusActionPerformed
+        if (objLogMenu.Existe()) {
+            try {
+                leerMenus();
+            } catch (IOException ex) {
+                Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.jTableListaMenus.removeAll();
+        Object columnas[] = {"Nombre", "Descripcion", "Dias", "Meses"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTableListaMenus.setModel(modelo);
+        System.out.println(ArrayMenu);
+        for (Object objAux : ArrayMenu) {
+            Menu objMenu = (Menu) objAux;
+            String NewValor[] = {
+                objMenu.getNombre(),
+                objMenu.getDescripcion(),
+                objMenu.getDias(),
+                objMenu.getMeses()
+            };
+            modelo.addRow(NewValor);
+        }
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonListarMenusActionPerformed
+
+    private void jButtonListarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarPlatosActionPerformed
+        if (objLogPlato.Existe()) {
+            try {
+                leerPlatos();
+            } catch (IOException ex) {
+                Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.jTableListaPlatos.removeAll();
+            Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Estimado(m)"};
+            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+            jTableListaPlatos.setModel(modelo);
+            for (Object objAux : ArrayPlatos) {
+                Plato objPlato = (Plato) objAux;
+                String NewValor[] = {
+                    objPlato.getNombre(),
+                    String.valueOf(objPlato.getCosto()),
+                    objPlato.getDescripcion(),
+                    String.valueOf(objPlato.getTiempo())
+                };
+                modelo.addRow(NewValor);
+            }
+        }
+    }//GEN-LAST:event_jButtonListarPlatosActionPerformed
+
+    private void jButtonCrearMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearMenuActionPerformed
+        String nombre = this.jTextFieldNombre.getText();
+        String descripcion = this.jTextAreaDescripcion.getText();
+        //Dias
+        String dias = "";
+        if (this.jRadioButtonLunes.isSelected()) {
+            dias += "Lun|";
+        }
+        if (this.jRadioButtonMartes.isSelected()) {
+            dias += "Mar|";
+        }
+        if (this.jRadioButtonMiercoles.isSelected()) {
+            dias += "Mier|";
+        }
+        if (this.jRadioButtonJueves.isSelected()) {
+            dias += "Jue|";
+        }
+        if (this.jRadioButtonViernes.isSelected()) {
+            dias += "Vie|";
+        }
+        if (this.jRadioButtonSabado.isSelected()) {
+            dias += "Sab|";
+        }
+        if (this.jRadioButtonDomingo.isSelected()) {
+            dias += "Dom|";
+        }
+        //Meses
+        String meses = "";
+        if (this.jRadioButtonEnero.isSelected()) {
+            meses += "Ene|";
+        }
+        if (this.jRadioButtonFebrero.isSelected()) {
+            meses += "Feb|";
+        }
+        if (this.jRadioButtonMarzo.isSelected()) {
+            meses += "Mar|";
+        }
+        if (this.jRadioButtonAbril.isSelected()) {
+            meses += "Abr|";
+        }
+        if (this.jRadioButtonMayo.isSelected()) {
+            meses += "May|";
+        }
+        if (this.jRadioButtonJunio.isSelected()) {
+            meses += "Jun|";
+        }
+        if (this.jRadioButtonJulio.isSelected()) {
+            meses += "Jul|";
+        }
+        if (this.jRadioButtonAgosto.isSelected()) {
+            meses += "Ago|";
+        }
+        if (this.jRadioButtonSeptiembre.isSelected()) {
+            meses += "Sep|";
+        }
+        if (this.jRadioButtonOctubre.isSelected()) {
+            meses += "Oct|";
+        }
+        if (this.jRadioButtonNoviembre.isSelected()) {
+            meses += "Nov|";
+        }
+        if (this.jRadioButtonDiciembre.isSelected()) {
+            meses += "Dic|";
+        }
+        //Crear objeto Menu
+        Menu objNuevoMenu = new Menu(nombre, descripcion, dias, meses);
+        if (objLogMenu.Existe()) {
+            try {
+                leerMenus();
+            } catch (IOException ex) {
+                Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        ArrayMenu.add(objNuevoMenu);
+        try {
+            objLogMenu.EscribirMenu(ArrayMenu);
+        } catch (IOException ex) {
+            Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonCrearMenuActionPerformed
+
+    private void jTableListaMenusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableListaMenusMouseClicked
+        rowSelMenu = this.jTableListaMenus.getSelectedRow();
+        this.jTablePlatosMenu.removeAll();
+        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Aprox."};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosMenu.setModel(modelo);
+        for (Plato objAux : ArrayMenu.get(rowSelMenu).listaPlatosMenu) {
+            String NewValor[] = {
+                objAux.getNombre(),
+                String.valueOf(objAux.getCosto()),
+                objAux.getDescripcion(),
+                String.valueOf(objAux.getTiempo())
+            };
+            modelo.addRow(NewValor);
+        }
+    }//GEN-LAST:event_jTableListaMenusMouseClicked
+
+    void leerPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
+
+        ArrayPlatos.clear();
+        objLogPlato.LeerPlatos(ArrayPlatos);
+
+    }
+
+    void leerMenus() throws IOException, FileNotFoundException, ClassNotFoundException {
+
+        ArrayMenu.clear();;
+        objLogMenu.LeerMenu(ArrayMenu);
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButtonAgregarMenu;
+    private javax.swing.JButton jButtonCrearMenu;
+    private javax.swing.JButton jButtonListarMenus;
+    private javax.swing.JButton jButtonListarPlatos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -468,9 +703,9 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTableListaMenus;
+    private javax.swing.JTable jTableListaPlatos;
+    private javax.swing.JTable jTablePlatosMenu;
     private javax.swing.JTextArea jTextAreaDescripcion;
     private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables

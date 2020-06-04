@@ -5,6 +5,22 @@
  */
 package GUI;
 
+import CLases.Cocinero;
+import CLases.Pedido;
+import CLases.Plato;
+import CLases.PlatoPedido;
+import Logica.LogCocinero;
+import Logica.LogColaPedido;
+import Logica.LogPedido;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author accel
@@ -14,8 +30,19 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     /**
      * Creates new form DespachoPedidoCocinero
      */
-    public DespachoPedidoCocinero() {
+    Pedido objPedido = new Pedido();
+
+    LogPedido objLogPedido = new LogPedido();
+    LogCocinero objLogCocinero = new LogCocinero();
+    LogColaPedido objLogColaPedido = new LogColaPedido();
+
+    ArrayList<Pedido> ArrayPedidos = new ArrayList<Pedido>();
+    ArrayList<Cocinero> ArrayCocinero = new ArrayList<Cocinero>();
+    ArrayList<PlatoPedido> ArrayPlatosPedido = new ArrayList<PlatoPedido>();
+
+    public DespachoPedidoCocinero() throws IOException, FileNotFoundException, ClassNotFoundException {
         initComponents();
+        CargarCombos();
     }
 
     /**
@@ -28,23 +55,22 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePedidos = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jTablePlatosPedido = new javax.swing.JTable();
+        jButtonActualizarPedidos = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton4 = new javax.swing.JButton();
+        jButtonPlatoProcesado = new javax.swing.JButton();
+        jButtonDespacharPedido = new javax.swing.JButton();
+        jComboBoxCocinero = new javax.swing.JComboBox<>();
+        jButtonProcesarPedido = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTablePedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -55,9 +81,11 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
                 "Numero Pedido", "Estado", "TiempoPedido"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTablePedidos);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 112, -1, 145));
+
+        jTablePlatosPedido.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -68,155 +96,228 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
                 "Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
-
-        jButton1.setText("Actualizar Pedidos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jTablePlatosPedido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePlatosPedidoMouseClicked(evt);
             }
         });
+        jScrollPane2.setViewportView(jTablePlatosPedido);
 
-        jLabel1.setText("Numero de pedido");
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 398, -1, 118));
+
+        jButtonActualizarPedidos.setText("Actualizar Pedidos");
+        jButtonActualizarPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualizarPedidosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonActualizarPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 70, -1, -1));
+
+        jLabel1.setText("Pedido");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 73, -1, -1));
 
         jLabel2.setText("Platos del pedido");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 364, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel3.setText("COCINA");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, -1, -1));
 
-        jButton2.setText("Despachar Plato");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonPlatoProcesado.setText("Plato Procesado");
+        jButtonPlatoProcesado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonPlatoProcesadoActionPerformed(evt);
             }
         });
+        getContentPane().add(jButtonPlatoProcesado, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 560, -1, -1));
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "nombre Plato", "Cantidad", "numero Pedido"
+        jButtonDespacharPedido.setText("Despachar Pedido");
+        jButtonDespacharPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDespacharPedidoActionPerformed(evt);
             }
-        ));
-        jScrollPane3.setViewportView(jTable3);
+        });
+        getContentPane().add(jButtonDespacharPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 560, -1, -1));
 
-        jLabel4.setText("Platos en proceso");
+        getContentPane().add(jComboBoxCocinero, new org.netbeans.lib.awtextra.AbsoluteConstraints(531, 153, -1, -1));
 
-        jButton3.setText("Despachar Pedido");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jButton4.setText("Procesar Pedido");
+        jButtonProcesarPedido.setText("Procesar Pedido");
+        jButtonProcesarPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonProcesarPedidoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonProcesarPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(177, 275, -1, -1));
 
         jLabel5.setText("Cocinero a cargo del pedido");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addComponent(jLabel4)
-                                .addGap(191, 191, 191))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jButton2)
-                        .addGap(62, 62, 62)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addComponent(jButton4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(445, 445, 445)
-                        .addComponent(jLabel3)))
-                .addContainerGap(113, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addGap(103, 103, 103))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(326, 326, 326)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(531, 112, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonActualizarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarPedidosActionPerformed
+        String estado = null;
+        if (objLogPedido.Existe()) {
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+            try {
+                leerPedidos();
+            } catch (IOException ex) {
+                Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
+            this.jTablePedidos.removeAll();
+            Object columnas[] = {"Numero de pedido", "Estado", "Tiempo Estimado(m)"};
+            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+            jTablePedidos.setModel(modelo);
+            for (Object objAux : ArrayPedidos) {
+                Pedido objPedido = (Pedido) objAux;
+                if (objPedido.getEstado() == 1) {
+                    estado = "Registrado";
+                } else if (objPedido.getEstado() == 2) {
+                    estado = "Cocinando";
+                } else if (objPedido.getEstado() == 3) {
+                    estado = "Despachado";
+                } else if (objPedido.getEstado() == 4) {
+                    estado = "Pagando";
+                } else if (objPedido.getEstado() == 5) {
+                    estado = "Finalizado";
+                }
+                String NewValor[] = {
+                    String.valueOf(objPedido.getNumeroPedido()),
+                    estado,
+                    String.valueOf(objPedido.getTiempoAproximado())
+                };
+                modelo.addRow(NewValor);
+            }
+        }
+    }//GEN-LAST:event_jButtonActualizarPedidosActionPerformed
+
+    private void jButtonPlatoProcesadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlatoProcesadoActionPerformed
+        String estado = null;
+        int row = -1;
+        ArrayPlatosPedido.removeAll(ArrayPlatosPedido);
+        jTablePlatosPedido.removeAll();
+        row = jTablePlatosPedido.getSelectedRow();
+        PlatoPedido objAux = new PlatoPedido();
+        objAux = ArrayPlatosPedido.get(row);
+        objAux.setEstado(3);
+        ArrayPlatosPedido.add(row, objAux);
+
+        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosPedido.setModel(modelo);
+
+        objPedido = ArrayPedidos.get(row);
+
+        for (PlatoPedido objLogPedido : objPedido.getListaPlatoPedido()) {
+            PlatoPedido objPedidoPla = objLogPedido;
+            if (objPedidoPla.getEstado() == 1) {
+                estado = "Registrado";
+            } else if (objPedidoPla.getEstado() == 2) {
+                estado = "Cocinando";
+            } else if (objPedidoPla.getEstado() == 2) {
+                estado = "Finalizado";
+            }
+            String NewValor[] = {
+                objPedidoPla.getPlato().getNombre(),
+                estado,
+                objPedidoPla.getObservacion(),
+                String.valueOf(objPedidoPla.getPlato().getTiempo()),
+                String.valueOf(objPedidoPla.getCantidad())
+
+            };
+            System.out.println(objPedidoPla);
+            modelo.addRow(NewValor);
+
+        }
+
+    }//GEN-LAST:event_jButtonPlatoProcesadoActionPerformed
+
+    private void jButtonProcesarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarPedidoActionPerformed
+        String estado = null;
+        int row = -1;
+        ArrayPlatosPedido.removeAll(ArrayPlatosPedido);
+
+        jTablePlatosPedido.removeAll();
+        row = jTablePedidos.getSelectedRow();
+        Pedido objAux = new Pedido();
+        objAux = ArrayPedidos.get(row);
+        objAux.setEstado(2);
+        ArrayPedidos.add(row, objAux);
+
+        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosPedido.setModel(modelo);
+
+        objPedido = ArrayPedidos.get(row);
+
+        for (PlatoPedido objLogPedido : objPedido.getListaPlatoPedido()) {
+            PlatoPedido objPedidoPla = objLogPedido;
+            if (objPedidoPla.getEstado() == 1) {
+                estado = "Registrado";
+            } else if (objPedidoPla.getEstado() == 2) {
+                estado = "Cocinando";
+            } else if (objPedidoPla.getEstado() == 3) {
+                estado = "Finalizado";
+            }
+            String NewValor[] = {
+                objPedidoPla.getPlato().getNombre(),
+                estado,
+                objPedidoPla.getObservacion(),
+                String.valueOf(objPedidoPla.getPlato().getTiempo()),
+                String.valueOf(objPedidoPla.getCantidad())
+
+            };
+            System.out.println(objPedidoPla);
+            modelo.addRow(NewValor);
+
+        }
+    }//GEN-LAST:event_jButtonProcesarPedidoActionPerformed
+
+    private void jTablePlatosPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePlatosPedidoMouseClicked
+
+
+    }//GEN-LAST:event_jTablePlatosPedidoMouseClicked
+
+    private void jButtonDespacharPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDespacharPedidoActionPerformed
+        int row = -1;
+        row = jTablePedidos.getSelectedRow();
+        Pedido objAux = new Pedido();
+        objAux = ArrayPedidos.get(row);
+        objAux.setEstado(3);
+        ArrayPedidos.add(row, objAux);
+        //ArrayPedidos.remove(row);
+        objLogColaPedido.eliminarPedido(objAux);
+        
+        JOptionPane.showMessageDialog(null, "Pedido Despachado");
+
+
+    }//GEN-LAST:event_jButtonDespacharPedidoActionPerformed
+    void leerPedidos() throws IOException, FileNotFoundException, ClassNotFoundException {
+        ArrayPedidos.clear();
+        objLogPedido.LeerPedido(ArrayPedidos);
+    }
+
+    public void CargarCombos() throws IOException, FileNotFoundException, ClassNotFoundException {
+        this.jComboBoxCocinero.setModel(new DefaultComboBoxModel(LogCocinero.CargarCocinero().toArray()));
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButtonActualizarPedidos;
+    private javax.swing.JButton jButtonDespacharPedido;
+    private javax.swing.JButton jButtonPlatoProcesado;
+    private javax.swing.JButton jButtonProcesarPedido;
+    private javax.swing.JComboBox<String> jComboBoxCocinero;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTablePedidos;
+    private javax.swing.JTable jTablePlatosPedido;
     // End of variables declaration//GEN-END:variables
 }
