@@ -24,6 +24,7 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
+    FacturaPantalla factura;
 
     DespachoPedidoCocinero dPedido = null;
     RegistrarEmpleado rEmpleado = null;
@@ -52,6 +53,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuItemAdministrarMenu = new javax.swing.JMenuItem();
         jMenuGerenteRegistrarEmpleados = new javax.swing.JMenuItem();
         jMenuCajero = new javax.swing.JMenu();
+        jMenuItCajeroFactura = new javax.swing.JMenuItem();
         jMenuMesero = new javax.swing.JMenu();
         jMenuItemCargarMenu = new javax.swing.JMenuItem();
         jMenuItemRegistroPedido = new javax.swing.JMenuItem();
@@ -103,6 +105,15 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuBar1.add(jMenuGerente);
 
         jMenuCajero.setText("Cajero");
+
+        jMenuItCajeroFactura.setText("Factura");
+        jMenuItCajeroFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItCajeroFacturaActionPerformed(evt);
+            }
+        });
+        jMenuCajero.add(jMenuItCajeroFactura);
+
         jMenuBar1.add(jMenuCajero);
 
         jMenuMesero.setText("Mesero");
@@ -196,6 +207,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         }
     }
+
     private void jMenuItemAgregarPlatoActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         if (agregarPlato == null) {
@@ -251,7 +263,20 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuGerenteRegistrarEmpleadosActionPerformed
 
+    private void jMenuItCajeroFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItCajeroFacturaActionPerformed
+        // TODO add your handling code here:
+        liberar();
+        if (factura == null) {
+            factura = new FacturaPantalla();
+            jDesktopPrincipal.add(factura);
+            factura.setVisible(true);
 
+        } else if (factura.isClosed()) {
+            factura = new FacturaPantalla();
+            jDesktopPrincipal.add(factura);
+            factura.setVisible(true);
+        }
+    }//GEN-LAST:event_jMenuItCajeroFacturaActionPerformed
 
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
         liberar();
@@ -330,8 +355,12 @@ public class NewJFrame extends javax.swing.JFrame {
             registrarPlatos = null;
         }
         if (administrarMenus != null) {
-            administrarMenus.dispose();;
+            administrarMenus.dispose();
             administrarMenus = null;
+        }
+        if (factura != null) {
+            factura.dispose();
+            factura = null;
         }
     }
 
@@ -344,6 +373,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuCocineroDespachoPedido;
     private javax.swing.JMenu jMenuGerente;
     private javax.swing.JMenuItem jMenuGerenteRegistrarEmpleados;
+    private javax.swing.JMenuItem jMenuItCajeroFactura;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemAdministrarMenu;
     private javax.swing.JMenuItem jMenuItemAgregarPlato;

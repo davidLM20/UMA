@@ -28,9 +28,9 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     /**
      * Creates new form RegistrarPedido
      */
-    static ArrayList<Plato> ArrayPlatos = new ArrayList();
-    static ArrayList<Pedido> ArrayPedidos = new ArrayList();
-    static ArrayList<PlatoPedido> ArrayPlatoPedidos = new ArrayList();
+    static ArrayList<Plato> ArrayPlatos = new ArrayList<>();
+    static ArrayList<Pedido> ArrayPedidos = new ArrayList<>();
+    static ArrayList<PlatoPedido> ArrayPlatoPedidos = new ArrayList<>();
     static LogPedido objLogPedido = new LogPedido();
     static Pedido objPedido = new Pedido();
     static LogPlato objLogPlato = new LogPlato();
