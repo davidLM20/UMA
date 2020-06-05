@@ -23,7 +23,7 @@ public class Menu implements Serializable{
 	public String descripcion;
 	public String dias;
 	public String meses;
-	public ArrayList<Plato> listaPlatosMenu = new ArrayList<Plato>();
+	public ArrayList<Plato> listaPlatosMenu = new ArrayList<>();
 
     public Menu() {
     }

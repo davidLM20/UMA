@@ -26,7 +26,6 @@ public class NewJFrame extends javax.swing.JFrame {
     RegistrarPedido rPedido;
 
     DespachoPedidoCocinero dPedido = null;
-
     AgregarPlato agregarPlato;
 
     public NewJFrame() {
@@ -186,7 +185,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
         }
     }
-
     private void jMenuItemAgregarPlatoActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         if (agregarPlato == null) {
@@ -227,7 +225,15 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemAdministrarMenuActionPerformed
 
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
-
+        liberar();
+        if (mCmenu == null) {
+            mCmenu = new MeseroCargarMenu();
+            jDesktopPrincipal.add(mCmenu);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = mCmenu.getSize();
+            mCmenu.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            mCmenu.setVisible(true);
+        }
     }
 
     private void jMenuItemRegistroPedidoActionPerformed(java.awt.event.ActionEvent evt) {

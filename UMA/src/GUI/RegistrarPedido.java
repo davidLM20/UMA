@@ -5,9 +5,12 @@
  */
 package GUI;
 
+import CLases.Menu;
+import CLases.Mesero;
 import CLases.Pedido;
 import CLases.Plato;
 import CLases.PlatoPedido;
+import Logica.LogMenu;
 import Logica.LogPedido;
 import Logica.LogPlato;
 import java.io.IOException;
@@ -30,10 +33,15 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     static ArrayList<PlatoPedido> ArrayPlatoPedidos = new ArrayList();
     static LogPedido objLogPedido = new LogPedido();
     static Pedido objPedido = new Pedido();
+    static LogPlato objLogPlato = new LogPlato();
     static Plato auxPlato = new Plato();
+    static Menu objMenu = new Menu();
+    static LogMenu objLogMenu = new  LogMenu();
     int rowSel = -1;
 
-    public RegistrarPedido() {
+    //Mesero mesero;
+    public RegistrarPedido(/*Mesero mesero*/) {
+        //this.mesero = mesero;
         initComponents();
     }
 
@@ -288,7 +296,8 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         try {
             ArrayPlatos.removeAll(ArrayPlatos);
 
-            LogPlato.LeerPlatos(ArrayPlatos);
+            objLogPlato.LeerPlatos(ArrayPlatos);
+            ArrayPlatos = objLogMenu.MenuActivo().getListaPlatosMenu();
             jTableListaGeneral.removeAll();
             Object columnas[] = {"Nombre", "Descripcion", "Coste", "tiempo"};
             DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -333,8 +342,8 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
         jTablePlatosPedido.setModel(modelo);
         
-        for (PlatoPedido objLogPedido : objPedido.getListaPlatoPedido()) {
-            PlatoPedido objPedidoPla = objLogPedido;
+        for (PlatoPedido objLogPedidoAux : objPedido.getListaPlatoPedido()) {
+            PlatoPedido objPedidoPla = objLogPedidoAux;
             String NewValor[] = {
                 objPedidoPla.getPlato().getNombre(),
                 String.valueOf(objPedidoPla.getCantidad()),

@@ -11,7 +11,7 @@ import CLases.Mesero;
 import CLases.Pedido;
 import CLases.Plato;
 import CLases.PlatoPedido;
-import static Logica.LogPlato.fichero;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class LogPedido {
     }
 
     public static void calcularTiempoAprox(Pedido pedido) {
-        System.out.println("skdfjlsdkj");
+        
         double tiempoTotal = calcularTiempoTotal(pedido);
         double sumatoria = 0.00;
         int n = 0;
@@ -44,14 +44,8 @@ public class LogPedido {
             Plato plato = objPlatoPedido.getPlato();
 
             double peso = calcularPesoPlato(objPlatoPedido, tiempoTotal);
-
-
-            System.out.println(peso);
-
             sumatoria += ((plato.getTiempo() + ((2 * objPlatoPedido.getCantidad()) - 2)) * peso);
             n += 1;
-
-            System.out.println(sumatoria);
 
         }
         pedido.setTiempoAproximado((sumatoria+tiempoTotal)/2);
@@ -78,14 +72,13 @@ public class LogPedido {
     
     public Pedido BuscarPedido(ArrayList<Pedido> ArrayPedidos, Pedido objPedidoNumeroPedido) {
         Pedido objAux = new Pedido(); 
-// 
+
         for (Pedido objPedidoNumPedido : ArrayPedidos) {
             int intNum = objPedidoNumPedido.getNumeroPedido();
-            System.out.println(intNum);
+            
             if (intNum == objPedidoNumeroPedido.getNumeroPedido()) {
                 objAux = objPedidoNumPedido;
-                System.out.println("////");
-                System.out.println(objAux);
+                
                 break;
             }
         }

@@ -5,6 +5,17 @@
  */
 package GUI;
 
+import CLases.Menu;
+import CLases.Mesero;
+import CLases.Plato;
+import Logica.LogMenu;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author David Lopez
@@ -14,7 +25,14 @@ public class MeseroCargarMenu extends javax.swing.JInternalFrame {
     /**
      * Creates new form MeseroCargarMenu
      */
-    public MeseroCargarMenu() {
+    Mesero mesero;
+
+    ArrayList<Menu> ArrayMenu = new ArrayList<>();
+    LogMenu objLogMenu = new LogMenu();
+    Menu objMenu = new Menu();
+
+    public MeseroCargarMenu( /*Mesero mesero*/) {
+        //this.mesero = mesero;
         initComponents();
     }
 
@@ -31,13 +49,8 @@ public class MeseroCargarMenu extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableMenu = new javax.swing.JTable();
         jButtonCargarMenu = new javax.swing.JButton();
-        jButtonBuscar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
 
-        setClosable(true);
-        setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(870, 400));
         setVisible(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -62,40 +75,54 @@ public class MeseroCargarMenu extends javax.swing.JInternalFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 420, 190));
 
         jButtonCargarMenu.setText("Cargar Menú");
+        jButtonCargarMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCargarMenuActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButtonCargarMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, -1, -1));
-
-        jButtonBuscar.setText("Buscar");
-        getContentPane().add(jButtonBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 90, -1, -1));
 
         jLabel2.setText("Platos del Día:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, 180, -1));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 140, 140, -1));
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jButtonCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarMenuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+
+        try {
+            ArrayMenu.removeAll(ArrayMenu);
+            objLogMenu.LeerMenu(ArrayMenu);
+            objMenu = objLogMenu.MenuActivo();
+            
+            this.jTableMenu.removeAll();
+            Object columnas[] = {"Nombre", "descripcion"};
+            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+            jTableMenu.setModel(modelo);
+            for (Plato objAux : objMenu.getListaPlatosMenu()) {
+                Plato objPlato = objAux;
+                String NewValor[] = {
+                    objPlato.getNombre(),
+                    objPlato.getDescripcion(),               
+                };
+                modelo.addRow(NewValor);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MeseroCargarMenu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MeseroCargarMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_jButtonCargarMenuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonCargarMenu;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableMenu;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
