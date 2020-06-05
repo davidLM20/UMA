@@ -47,7 +47,7 @@ public class Archivo {
                 }
                 //sout de prueba
                 
-                System.out.println(aux.toString());
+                //System.out.println(aux.toString());
                 aux = ois.readObject();
             }
             
