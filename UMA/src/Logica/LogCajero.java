@@ -8,6 +8,7 @@ package Logica;
 import Archivos.Archivo;
 import CLases.Cajero;
 import Data.DataCajero;
+import static Logica.LogEmpleado.fichero;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class LogCajero {
 
         objDataCajero.GuardaArchivoCajero(objCajero);
 
+    }
+    public static boolean Existe(){
+        return Archivo.ExisteFichero(fichero);
     }
 
     

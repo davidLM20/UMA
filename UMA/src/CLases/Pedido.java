@@ -34,7 +34,7 @@ public class Pedido implements Serializable{
         this.mesero = mesero;
         this.cajero = cajero;
         this.cocinero = cocinero;
-        this.listaPlatoPedido.add(new PlatoPedido(cantidad,estadoPlatoPedido,plato,observacion));
+        this.listaPlatoPedido.add(new PlatoPedido(cantidad,estado,plato,observacion));
         this.numeroMesa = numeroMesa;
     }
 
