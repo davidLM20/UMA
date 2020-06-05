@@ -31,6 +31,7 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
      * Creates new form DespachoPedidoCocinero
      */
     Pedido objPedido = new Pedido();
+    Pedido objPedidoActualizado = new Pedido();
 
     LogPedido objLogPedido = new LogPedido();
     LogCocinero objLogCocinero = new LogCocinero();
@@ -39,8 +40,10 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     ArrayList<Pedido> ArrayPedidos = new ArrayList<Pedido>();
     ArrayList<Cocinero> ArrayCocinero = new ArrayList<Cocinero>();
     ArrayList<PlatoPedido> ArrayPlatosPedido = new ArrayList<PlatoPedido>();
+    ArrayList<Cocinero> cocinerosLogueados = new ArrayList<Cocinero>();
 
     public DespachoPedidoCocinero() throws IOException, FileNotFoundException, ClassNotFoundException {
+        this.cocinerosLogueados = cocinerosLogueados;
         initComponents();
         CargarCombos();
     }
@@ -156,7 +159,7 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActualizarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarPedidosActionPerformed
-        String estado = null;
+        //String estado = null;
         if (objLogPedido.Existe()) {
 
             try {
@@ -166,86 +169,36 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
             }
+            ActualizarTablaPedido();
 
-            this.jTablePedidos.removeAll();
-            Object columnas[] = {"Numero de pedido", "Estado", "Tiempo Estimado(m)"};
-            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-            jTablePedidos.setModel(modelo);
-            for (Object objAux : ArrayPedidos) {
-                Pedido objPedido = (Pedido) objAux;
-                if (objPedido.getEstado() == 1) {
-                    estado = "Registrado";
-                } else if (objPedido.getEstado() == 2) {
-                    estado = "Cocinando";
-                } else if (objPedido.getEstado() == 3) {
-                    estado = "Despachado";
-                } else if (objPedido.getEstado() == 4) {
-                    estado = "Pagando";
-                } else if (objPedido.getEstado() == 5) {
-                    estado = "Finalizado";
-                }
-                String NewValor[] = {
-                    String.valueOf(objPedido.getNumeroPedido()),
-                    estado,
-                    String.valueOf(objPedido.getTiempoAproximado())
-                };
-                modelo.addRow(NewValor);
-            }
         }
     }//GEN-LAST:event_jButtonActualizarPedidosActionPerformed
 
     private void jButtonPlatoProcesadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlatoProcesadoActionPerformed
         String estado = null;
         int row = -1;
-        ArrayPlatosPedido.removeAll(ArrayPlatosPedido);
-        jTablePlatosPedido.removeAll();
+        try {
+            leerPedidos();
+        } catch (IOException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //jTablePlatosPedido.removeAll();
         row = jTablePlatosPedido.getSelectedRow();
         PlatoPedido objAux = new PlatoPedido();
         objAux = ArrayPlatosPedido.get(row);
         objAux.setEstado(3);
         ArrayPlatosPedido.add(row, objAux);
-
-        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTablePlatosPedido.setModel(modelo);
-
-        objPedido = ArrayPedidos.get(row);
-
-        for (PlatoPedido objLogPedido : objPedido.getListaPlatoPedido()) {
-            PlatoPedido objPedidoPla = objLogPedido;
-            if (objPedidoPla.getEstado() == 1) {
-                estado = "Registrado";
-            } else if (objPedidoPla.getEstado() == 2) {
-                estado = "Cocinando";
-            } else if (objPedidoPla.getEstado() == 2) {
-                estado = "Finalizado";
-            }
-            String NewValor[] = {
-                objPedidoPla.getPlato().getNombre(),
-                estado,
-                objPedidoPla.getObservacion(),
-                String.valueOf(objPedidoPla.getPlato().getTiempo()),
-                String.valueOf(objPedidoPla.getCantidad())
-
-            };
-            System.out.println(objPedidoPla);
-            modelo.addRow(NewValor);
-
-        }
-
-    }//GEN-LAST:event_jButtonPlatoProcesadoActionPerformed
-
-    private void jButtonProcesarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarPedidoActionPerformed
-        String estado = null;
-        int row = -1;
-        ArrayPlatosPedido.removeAll(ArrayPlatosPedido);
-
-        jTablePlatosPedido.removeAll();
-        row = jTablePedidos.getSelectedRow();
-        Pedido objAux = new Pedido();
-        objAux = ArrayPedidos.get(row);
-        objAux.setEstado(2);
-        ArrayPedidos.add(row, objAux);
+        objPedidoActualizado.setListaPlatoPedido(ArrayPlatosPedido);
+        //ArrayPedidos.set(ArrayPedidos.indexOf(objPedido), objPedidoActualizado);
+        System.out.println("++++++++");
+        System.out.println(ArrayPedidos.indexOf(objPedido));
+        System.out.println(ArrayPedidos);
+        System.out.println("objPedido");
+        System.out.println(objPedido);
+        System.out.println("+++++++");
 
         Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -274,6 +227,64 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
             modelo.addRow(NewValor);
 
         }
+
+    }//GEN-LAST:event_jButtonPlatoProcesadoActionPerformed
+
+    private void jButtonProcesarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarPedidoActionPerformed
+        String estado = null;
+        int row = -1;
+        try {
+            leerPedidos();
+        } catch (IOException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        jTablePlatosPedido.removeAll();
+        row = jTablePedidos.getSelectedRow();
+        Pedido objAux = new Pedido();
+        objAux = ArrayPedidos.get(row);
+        System.out.println("---" + objAux);
+        objAux.setEstado(2);
+        System.out.println("+++" + objAux);
+        ArrayPedidos.remove(ArrayPedidos.get(row));
+        ArrayPedidos.add(row, objAux);
+        
+        System.out.println("pedidos actualizados");
+        System.out.println(ArrayPedidos);
+ 
+        ActualizarTablaPedido();
+
+        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosPedido.setModel(modelo);
+
+        objPedido = ArrayPedidos.get(row);
+        objPedidoActualizado = objPedido;
+
+        for (PlatoPedido objPlatoPedido : objPedido.getListaPlatoPedido()) {
+            if (objPlatoPedido.getEstado() == 1) {
+                estado = "Registrado";
+            } else if (objPlatoPedido.getEstado() == 2) {
+                estado = "Cocinando";
+            } else if (objPlatoPedido.getEstado() == 3) {
+                estado = "Finalizado";
+            }
+            String NewValor[] = {
+                objPlatoPedido.getPlato().getNombre(),
+                estado,
+                objPlatoPedido.getObservacion(),
+                String.valueOf(objPlatoPedido.getPlato().getTiempo()),
+                String.valueOf(objPlatoPedido.getCantidad())
+
+            };
+            System.out.println(objPlatoPedido);
+            modelo.addRow(NewValor);
+
+        }
+        ArrayPlatosPedido = ArrayPedidos.get(row).getListaPlatoPedido();
+
     }//GEN-LAST:event_jButtonProcesarPedidoActionPerformed
 
     private void jTablePlatosPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePlatosPedidoMouseClicked
@@ -290,12 +301,12 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
         ArrayPedidos.add(row, objAux);
         //ArrayPedidos.remove(row);
         objLogColaPedido.eliminarPedido(objAux);
-        
+
         JOptionPane.showMessageDialog(null, "Pedido Despachado");
 
 
     }//GEN-LAST:event_jButtonDespacharPedidoActionPerformed
-    void leerPedidos() throws IOException, FileNotFoundException, ClassNotFoundException {
+    public void leerPedidos() throws IOException, FileNotFoundException, ClassNotFoundException {
         ArrayPedidos.clear();
         objLogPedido.LeerPedido(ArrayPedidos);
     }
@@ -304,6 +315,34 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
         this.jComboBoxCocinero.setModel(new DefaultComboBoxModel(LogCocinero.CargarCocinero().toArray()));
 
     }
+    public void ActualizarTablaPedido(){
+        String estado = null;
+        this.jTablePedidos.removeAll();
+            Object columnas[] = {"Numero de pedido", "Estado", "Tiempo Estimado(m)"};
+            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+            jTablePedidos.setModel(modelo);
+            for (Object objAux : ArrayPedidos) {
+                Pedido objPedido = (Pedido) objAux;
+                if (objPedido.getEstado() == 1) {
+                    estado = "Registrado";
+                } else if (objPedido.getEstado() == 2) {
+                    estado = "Cocinando";
+                } else if (objPedido.getEstado() == 3) {
+                    estado = "Despachado";
+                } else if (objPedido.getEstado() == 4) {
+                    estado = "Pagando";
+                } else if (objPedido.getEstado() == 5) {
+                    estado = "Finalizado";
+                }
+                String NewValor[] = {
+                    String.valueOf(objPedido.getNumeroPedido()),
+                    estado,
+                    String.valueOf(objPedido.getTiempoAproximado())
+                };
+                modelo.addRow(NewValor);
+            }
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizarPedidos;

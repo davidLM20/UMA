@@ -8,6 +8,7 @@ package Logica;
 import Archivos.Archivo;
 import CLases.Cocinero;
 import Data.DataCocinero;
+import static Logica.LogEmpleado.fichero;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,19 +45,26 @@ public class LogCocinero {
     }
     public static ArrayList CargarCocinero() throws IOException, FileNotFoundException, ClassNotFoundException{
         ArrayList<Cocinero> listaCocineros = new ArrayList<Cocinero>();
+        ArrayList<String> resultado = new ArrayList<String>();
         Archivo.leer(listaCocineros, fichero);
-        
-        return listaCocineros;
+        String cadena = "";
+        for(Cocinero aux: listaCocineros){
+            cadena = aux.getNombre() + " " + aux.getApellido();
+            resultado.add(cadena);
+        }
+        return resultado;
     } 
-
+    public static boolean Existe(){
+        return Archivo.ExisteFichero(fichero);
+    }
     
 
     //************************
     
-//    public static void EscribirCajero(ArrayList ArrayObjetos) throws IOException {
-//        Archivo.escribir(ArrayObjetos,fichero );
-//    }
-//
+    public static void EscribirCocinero(ArrayList ArrayObjetos) throws IOException {
+        Archivo.escribir(ArrayObjetos,fichero );
+    }
+
     public static void LeerCocinero(ArrayList ArrayObjetos) throws IOException, FileNotFoundException, ClassNotFoundException {
         Archivo.leer(ArrayObjetos,fichero);
     }

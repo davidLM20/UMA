@@ -9,6 +9,7 @@ import Archivos.Archivo;
 import CLases.Mesero;
 
 import Data.DataMeseros;
+import static Logica.LogEmpleado.fichero;
 import java.io.FileNotFoundException;
 
 import java.io.IOException;
@@ -44,6 +45,9 @@ public class LogMesero {
     public void GuardarMesero(Mesero objMesero) throws IOException {
         DataMeseros objDataMeseros = new DataMeseros();
         objDataMeseros.GuardarMesero(objMesero);
+    }
+    public static boolean Existe(){
+        return Archivo.ExisteFichero(fichero);
     }
 
     //************************

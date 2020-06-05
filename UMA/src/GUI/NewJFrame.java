@@ -26,6 +26,8 @@ public class NewJFrame extends javax.swing.JFrame {
     RegistrarPedido rPedido;
 
     DespachoPedidoCocinero dPedido = null;
+    RegistrarEmpleado rEmpleado = null;
+
     AgregarPlato agregarPlato;
 
     public NewJFrame() {
@@ -48,6 +50,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jMenuGerente = new javax.swing.JMenu();
         jMenuItemRegistrarPlatos = new javax.swing.JMenuItem();
         jMenuItemAdministrarMenu = new javax.swing.JMenuItem();
+        jMenuGerenteRegistrarEmpleados = new javax.swing.JMenuItem();
         jMenuCajero = new javax.swing.JMenu();
         jMenuMesero = new javax.swing.JMenu();
         jMenuItemCargarMenu = new javax.swing.JMenuItem();
@@ -88,6 +91,14 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
         jMenuGerente.add(jMenuItemAdministrarMenu);
+
+        jMenuGerenteRegistrarEmpleados.setText("Registrar Empleados");
+        jMenuGerenteRegistrarEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuGerenteRegistrarEmpleadosActionPerformed(evt);
+            }
+        });
+        jMenuGerente.add(jMenuGerenteRegistrarEmpleados);
 
         jMenuBar1.add(jMenuGerente);
 
@@ -224,6 +235,24 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItemAdministrarMenuActionPerformed
 
+    private void jMenuGerenteRegistrarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGerenteRegistrarEmpleadosActionPerformed
+        liberar();
+        if (rEmpleado == null) {
+
+            rEmpleado = new RegistrarEmpleado();
+
+            jDesktopPrincipal.add(rEmpleado);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = rEmpleado.getSize();
+            rEmpleado.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            rEmpleado.setVisible(true);
+            this.jMenuGerenteRegistrarEmpleados.setEnabled(true);
+
+        }
+    }//GEN-LAST:event_jMenuGerenteRegistrarEmpleadosActionPerformed
+
+
+
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
         liberar();
         if (mCmenu == null) {
@@ -314,11 +343,9 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuCajero;
     private javax.swing.JMenuItem jMenuCocineroDespachoPedido;
     private javax.swing.JMenu jMenuGerente;
+    private javax.swing.JMenuItem jMenuGerenteRegistrarEmpleados;
     private javax.swing.JMenuItem jMenuItem1;
-
-
     private javax.swing.JMenuItem jMenuItemAdministrarMenu;
-
     private javax.swing.JMenuItem jMenuItemAgregarPlato;
     private javax.swing.JMenuItem jMenuItemCargarMenu;
     private javax.swing.JMenuItem jMenuItemRegistrarPlatos;
