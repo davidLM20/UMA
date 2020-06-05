@@ -12,11 +12,10 @@ import Logica.LogPlato;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -474,6 +473,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
         //System.out.println(objAuxMenu);
         ArrayMenu.set(rowSelMenu, objAuxMenu);
         //System.out.println(ArrayMenu);
+        
         try {
             objLogMenu.EscribirMenu(ArrayMenu);
         } catch (IOException ex) {
@@ -559,7 +559,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             dias += "Mar|";
         }
         if (this.jRadioButtonMiercoles.isSelected()) {
-            dias += "Mier|";
+            dias += "Mie|";
         }
         if (this.jRadioButtonJueves.isSelected()) {
             dias += "Jue|";

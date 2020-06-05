@@ -26,7 +26,6 @@ public class NewJFrame extends javax.swing.JFrame {
     RegistrarPedido rPedido;
 
     DespachoPedidoCocinero dPedido = null;
-
     AgregarPlato agregarPlato;
 
 
@@ -232,7 +231,15 @@ public class NewJFrame extends javax.swing.JFrame {
                                                                  
 
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
-
+        liberar();
+        if (mCmenu == null) {
+            mCmenu = new MeseroCargarMenu();
+            jDesktopPrincipal.add(mCmenu);
+            Dimension desktopSize = this.getSize();
+            Dimension FrameSize = mCmenu.getSize();
+            mCmenu.setLocation((desktopSize.width - FrameSize.width) / 2, (desktopSize.height - FrameSize.height) / 2);
+            mCmenu.setVisible(true);
+        }
 
 
     }
