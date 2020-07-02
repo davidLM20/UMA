@@ -484,26 +484,13 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
         }
         
         
-        this.jTablePlatosMenu.removeAll();
-        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Aprox."};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTablePlatosMenu.setModel(modelo);
-        for (Object aux : ArrayPlatos) {
-            Plato objAux = (Plato) aux;
-            String NewValor[] = {
-                objAux.getNombre(),
-                String.valueOf(objAux.getCosto()),
-                objAux.getDescripcion(),
-                String.valueOf(objAux.getTiempo())
-            };
-            modelo.addRow(NewValor);
-        }
+        listarPlatosMenu(objAuxMenu.getPlatoCollection());
     }//GEN-LAST:event_jButtonAgregarMenuActionPerformed
 
     private void jButtonListarMenusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarMenusActionPerformed
 
         try {
-            leerMenus();
+            cargarMenus();
         } catch (IOException ex) {
             Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -516,26 +503,13 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
     private void jButtonListarPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarPlatosActionPerformed
 
         try {
-            leerPlatos();
+            cargarPlatos();
         } catch (IOException ex) {
             Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.jTableListaPlatos.removeAll();
-        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Estimado(m)"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTableListaPlatos.setModel(modelo);
-        for (Object objAux : ArrayPlatos) {
-            Plato objPlato = (Plato) objAux;
-            String NewValor[] = {
-                objPlato.getNombre(),
-                String.valueOf(objPlato.getCosto()),
-                objPlato.getDescripcion(),
-                String.valueOf(objPlato.getTiempo())
-            };
-            modelo.addRow(NewValor);
-        }
+        
 
     }//GEN-LAST:event_jButtonListarPlatosActionPerformed
 
@@ -607,7 +581,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
         Menu objNuevoMenu = new Menu(null,nombre, descripcion, dias, meses);
         objLogMenu.create(objNuevoMenu);
             try {
-                leerMenus();
+                cargarMenus();
             } catch (IOException ex) {
                 Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
@@ -621,6 +595,11 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
         rowSelMenu = this.jTableListaMenus.getSelectedRow();
         Menu aux = (Menu) ArrayMenu.get(rowSelMenu);
         Collection temp = aux.getPlatoCollection();
+        listarPlatosMenu(temp);
+        
+    }//GEN-LAST:event_jTableListaMenusMouseClicked
+
+    void listarPlatosMenu(Collection temp){
         this.jTablePlatosMenu.removeAll();
         Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Aprox."};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -635,15 +614,29 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             };
             modelo.addRow(NewValor);
         }
-    }//GEN-LAST:event_jTableListaMenusMouseClicked
-
-    void leerPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
+    }
+    
+    void cargarPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
 
         ArrayPlatos = objLogPlato.findPlatoEntities();
+        this.jTableListaPlatos.removeAll();
+        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Estimado(m)"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTableListaPlatos.setModel(modelo);
+        for (Object objAux : ArrayPlatos) {
+            Plato objPlato = (Plato) objAux;
+            String NewValor[] = {
+                objPlato.getNombre(),
+                String.valueOf(objPlato.getCosto()),
+                objPlato.getDescripcion(),
+                String.valueOf(objPlato.getTiempo())
+            };
+            modelo.addRow(NewValor);
+        }
 
     }
 
-    void leerMenus() throws IOException, FileNotFoundException, ClassNotFoundException {
+    void cargarMenus() throws IOException, FileNotFoundException, ClassNotFoundException {
 
         ArrayMenu = objLogMenu.findMenuEntities();
         this.jTableListaMenus.removeAll();
