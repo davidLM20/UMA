@@ -127,6 +127,7 @@ public class Login_Entrar extends javax.swing.JInternalFrame {
 
     private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
         // TODO add your handling code here:
+        
         String contra = "";
         char[] hola = jPasswordFieldContraseña.getPassword();
         for (int i = 0; i < hola.length; i++) {
