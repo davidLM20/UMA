@@ -5,27 +5,23 @@
  */
 package GUI;
 
-import CLases.Cliente;
-import CLases.Factura;
-import CLases.Pedido;
-import CLases.Plato;
-import CLases.PlatoPedido;
-import static GUI.AgregarPlato.ArrayPedidos;
-import static GUI.AgregarPlato.ArrayPlatos;
-import static GUI.AgregarPlato.objLogPedido;
-import static GUI.RegistrarPedido.objLogPedido;
-import Logica.LogCliente;
-import Logica.LogFactura;
-import Logica.LogMenu;
-import Logica.LogPedido;
-import Logica.LogPlato;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import Entidades.Cliente;
+import Entidades.Factura;
+import Entidades.Pedido;
+import Entidades.Plato;
+import BDLogica.LogCliente;
+import BDLogica.LogFactura;
+import BDLogica.LogMenu;
+import BDLogica.LogPedido;
+import BDLogica.LogPlato;
+//import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,9 +46,9 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
     static LogCliente objLogCliente = new LogCliente();
     static Cliente objCliente = new Cliente();
     static Factura objFactura = new Factura();
-    static ArrayList<Factura> ArrayFactura = new ArrayList<Factura>();
-    static ArrayList<Cliente> ArrayCliente = new ArrayList<Cliente>();
-
+    static List<Factura> ArrayFactura = new ArrayList<Factura>();
+    static List<Pedido> ArrayPedido = new ArrayList<Pedido>();
+   
     public FacturaPantalla() {
         initComponents();
     }
@@ -86,7 +82,7 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
         jTextFieldFecha = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaFeedback = new javax.swing.JTextArea();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jRadio1Estrella = new javax.swing.JRadioButton();
@@ -137,7 +133,7 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(jTableDescripcionPedido);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 433, 104));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 433, 110));
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setText("FACTURACION");
@@ -170,8 +166,8 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
         jLabel11.setText("Pedidos");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, -1, 14));
 
-        jLabel12.setText("Descripcion del pedido");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 290, -1, 14));
+        jLabel12.setText("Descripcion del pedido-plato");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, -1, 14));
 
         jButtonCrearFactura.setText("Crear Factura");
         jButtonCrearFactura.addActionListener(new java.awt.event.ActionListener() {
@@ -196,9 +192,9 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        jTextAreaFeedback.setColumns(20);
+        jTextAreaFeedback.setRows(5);
+        jScrollPane3.setViewportView(jTextAreaFeedback);
 
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 358, -1));
 
@@ -284,27 +280,21 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
             Logger.getLogger(FacturaPantalla.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        ArrayPedidos.removeAll(ArrayPedidos);
-        try {
-            objLogPedido.LeerPedido(ArrayPedidos);
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(FacturaPantalla.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ArrayPedido.clear();
+        
 
         jTablePedidos.removeAll();
-        Object columnas[] = {"Numero de Orden", "Numero de Mesa"};
+        Object columnas[] = {"Numero de Orden", "Estado"};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
         jTablePedidos.setModel(modelo);
 
-        if (objLogPedido.CompararPedido(objPedido, objNumeroPedido)) {
-
             String NewValor[] = {
-                String.valueOf(objPedido.getNumeroPedido()),
-                String.valueOf(objPedido.getNumeroMesa())
+                String.valueOf(objNumeroPedido.getNumeroPedido()),
+                String.valueOf(objNumeroPedido.getEstado())
             };
             modelo.addRow(NewValor);
 
-        }
+        
         try {
             ListarPlatos();
         } catch (IOException | ClassNotFoundException ex) {
@@ -384,15 +374,14 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
     public void BuscarPedido() throws IOException, FileNotFoundException, ClassNotFoundException {
         int busquedaPedido = Integer.parseInt(jTextFieldNroPedido.getText());
         objNumeroPedido.setNumeroPedido(busquedaPedido);
-        ArrayPedidos.clear();
-        objLogPedido.LeerPedido(ArrayPedidos);
-        LogPedido objLogPedidoAux = new LogPedido();
-        objPedido = objLogPedidoAux.BuscarPedido(ArrayPedidos, objNumeroPedido);
-        System.out.println("/////");
-        System.out.println(objPedido);
-        objPedidoAux = objPedido;
-        System.out.println("@@@@@@@");
-        System.out.println(objPedidoAux);
+        ArrayPedido.clear();
+        ArrayPedido = objLogPedido.findPedidoEntities();
+        for (Pedido aux: ArrayPedido) {
+            if(aux.getNumeroPedido()== busquedaPedido ){
+                objNumeroPedido = aux;
+            }
+        }
+        
     }
 
     public void ListarPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
@@ -468,7 +457,7 @@ public class FacturaPantalla extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableDescripcionPedido;
     private javax.swing.JTable jTablePedidos;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextAreaFeedback;
     private javax.swing.JTextField jTextFieldApellido;
     private javax.swing.JTextField jTextFieldCI;
     private javax.swing.JTextField jTextFieldDireccion;

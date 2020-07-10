@@ -6,7 +6,7 @@
 package BDLogica;
 
 import BDLogica.exceptions.NonexistentEntityException;
-import Entidades.Cajero;
+import Entidades.Cocinero;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -18,15 +18,16 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author USUARIO
  */
-public class CajeroJpaController implements Serializable {
+public class LogCocinero implements Serializable {
 
-    public CajeroJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public LogCocinero() {
+        this.emf = Persistence.createEntityManagerFactory("UMAPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -34,28 +35,28 @@ public class CajeroJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Cajero cajero) {
-        if (cajero.getPedidoCollection() == null) {
-            cajero.setPedidoCollection(new ArrayList<Pedido>());
+    public void create(Cocinero cocinero) {
+        if (cocinero.getPedidoCollection() == null) {
+            cocinero.setPedidoCollection(new ArrayList<Pedido>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Collection<Pedido> attachedPedidoCollection = new ArrayList<Pedido>();
-            for (Pedido pedidoCollectionPedidoToAttach : cajero.getPedidoCollection()) {
+            for (Pedido pedidoCollectionPedidoToAttach : cocinero.getPedidoCollection()) {
                 pedidoCollectionPedidoToAttach = em.getReference(pedidoCollectionPedidoToAttach.getClass(), pedidoCollectionPedidoToAttach.getIdPedido());
                 attachedPedidoCollection.add(pedidoCollectionPedidoToAttach);
             }
-            cajero.setPedidoCollection(attachedPedidoCollection);
-            em.persist(cajero);
-            for (Pedido pedidoCollectionPedido : cajero.getPedidoCollection()) {
-                Cajero oldIdCajeroOfPedidoCollectionPedido = pedidoCollectionPedido.getIdCajero();
-                pedidoCollectionPedido.setIdCajero(cajero);
+            cocinero.setPedidoCollection(attachedPedidoCollection);
+            em.persist(cocinero);
+            for (Pedido pedidoCollectionPedido : cocinero.getPedidoCollection()) {
+                Cocinero oldIdCocineroOfPedidoCollectionPedido = pedidoCollectionPedido.getIdCocinero();
+                pedidoCollectionPedido.setIdCocinero(cocinero);
                 pedidoCollectionPedido = em.merge(pedidoCollectionPedido);
-                if (oldIdCajeroOfPedidoCollectionPedido != null) {
-                    oldIdCajeroOfPedidoCollectionPedido.getPedidoCollection().remove(pedidoCollectionPedido);
-                    oldIdCajeroOfPedidoCollectionPedido = em.merge(oldIdCajeroOfPedidoCollectionPedido);
+                if (oldIdCocineroOfPedidoCollectionPedido != null) {
+                    oldIdCocineroOfPedidoCollectionPedido.getPedidoCollection().remove(pedidoCollectionPedido);
+                    oldIdCocineroOfPedidoCollectionPedido = em.merge(oldIdCocineroOfPedidoCollectionPedido);
                 }
             }
             em.getTransaction().commit();
@@ -66,36 +67,36 @@ public class CajeroJpaController implements Serializable {
         }
     }
 
-    public void edit(Cajero cajero) throws NonexistentEntityException, Exception {
+    public void edit(Cocinero cocinero) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cajero persistentCajero = em.find(Cajero.class, cajero.getIdCajero());
-            Collection<Pedido> pedidoCollectionOld = persistentCajero.getPedidoCollection();
-            Collection<Pedido> pedidoCollectionNew = cajero.getPedidoCollection();
+            Cocinero persistentCocinero = em.find(Cocinero.class, cocinero.getIdCocinero());
+            Collection<Pedido> pedidoCollectionOld = persistentCocinero.getPedidoCollection();
+            Collection<Pedido> pedidoCollectionNew = cocinero.getPedidoCollection();
             Collection<Pedido> attachedPedidoCollectionNew = new ArrayList<Pedido>();
             for (Pedido pedidoCollectionNewPedidoToAttach : pedidoCollectionNew) {
                 pedidoCollectionNewPedidoToAttach = em.getReference(pedidoCollectionNewPedidoToAttach.getClass(), pedidoCollectionNewPedidoToAttach.getIdPedido());
                 attachedPedidoCollectionNew.add(pedidoCollectionNewPedidoToAttach);
             }
             pedidoCollectionNew = attachedPedidoCollectionNew;
-            cajero.setPedidoCollection(pedidoCollectionNew);
-            cajero = em.merge(cajero);
+            cocinero.setPedidoCollection(pedidoCollectionNew);
+            cocinero = em.merge(cocinero);
             for (Pedido pedidoCollectionOldPedido : pedidoCollectionOld) {
                 if (!pedidoCollectionNew.contains(pedidoCollectionOldPedido)) {
-                    pedidoCollectionOldPedido.setIdCajero(null);
+                    pedidoCollectionOldPedido.setIdCocinero(null);
                     pedidoCollectionOldPedido = em.merge(pedidoCollectionOldPedido);
                 }
             }
             for (Pedido pedidoCollectionNewPedido : pedidoCollectionNew) {
                 if (!pedidoCollectionOld.contains(pedidoCollectionNewPedido)) {
-                    Cajero oldIdCajeroOfPedidoCollectionNewPedido = pedidoCollectionNewPedido.getIdCajero();
-                    pedidoCollectionNewPedido.setIdCajero(cajero);
+                    Cocinero oldIdCocineroOfPedidoCollectionNewPedido = pedidoCollectionNewPedido.getIdCocinero();
+                    pedidoCollectionNewPedido.setIdCocinero(cocinero);
                     pedidoCollectionNewPedido = em.merge(pedidoCollectionNewPedido);
-                    if (oldIdCajeroOfPedidoCollectionNewPedido != null && !oldIdCajeroOfPedidoCollectionNewPedido.equals(cajero)) {
-                        oldIdCajeroOfPedidoCollectionNewPedido.getPedidoCollection().remove(pedidoCollectionNewPedido);
-                        oldIdCajeroOfPedidoCollectionNewPedido = em.merge(oldIdCajeroOfPedidoCollectionNewPedido);
+                    if (oldIdCocineroOfPedidoCollectionNewPedido != null && !oldIdCocineroOfPedidoCollectionNewPedido.equals(cocinero)) {
+                        oldIdCocineroOfPedidoCollectionNewPedido.getPedidoCollection().remove(pedidoCollectionNewPedido);
+                        oldIdCocineroOfPedidoCollectionNewPedido = em.merge(oldIdCocineroOfPedidoCollectionNewPedido);
                     }
                 }
             }
@@ -103,9 +104,9 @@ public class CajeroJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = cajero.getIdCajero();
-                if (findCajero(id) == null) {
-                    throw new NonexistentEntityException("The cajero with id " + id + " no longer exists.");
+                Integer id = cocinero.getIdCocinero();
+                if (findCocinero(id) == null) {
+                    throw new NonexistentEntityException("The cocinero with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -121,19 +122,19 @@ public class CajeroJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cajero cajero;
+            Cocinero cocinero;
             try {
-                cajero = em.getReference(Cajero.class, id);
-                cajero.getIdCajero();
+                cocinero = em.getReference(Cocinero.class, id);
+                cocinero.getIdCocinero();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The cajero with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The cocinero with id " + id + " no longer exists.", enfe);
             }
-            Collection<Pedido> pedidoCollection = cajero.getPedidoCollection();
+            Collection<Pedido> pedidoCollection = cocinero.getPedidoCollection();
             for (Pedido pedidoCollectionPedido : pedidoCollection) {
-                pedidoCollectionPedido.setIdCajero(null);
+                pedidoCollectionPedido.setIdCocinero(null);
                 pedidoCollectionPedido = em.merge(pedidoCollectionPedido);
             }
-            em.remove(cajero);
+            em.remove(cocinero);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -142,19 +143,19 @@ public class CajeroJpaController implements Serializable {
         }
     }
 
-    public List<Cajero> findCajeroEntities() {
-        return findCajeroEntities(true, -1, -1);
+    public List<Cocinero> findCocineroEntities() {
+        return findCocineroEntities(true, -1, -1);
     }
 
-    public List<Cajero> findCajeroEntities(int maxResults, int firstResult) {
-        return findCajeroEntities(false, maxResults, firstResult);
+    public List<Cocinero> findCocineroEntities(int maxResults, int firstResult) {
+        return findCocineroEntities(false, maxResults, firstResult);
     }
 
-    private List<Cajero> findCajeroEntities(boolean all, int maxResults, int firstResult) {
+    private List<Cocinero> findCocineroEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Cajero.class));
+            cq.select(cq.from(Cocinero.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -166,20 +167,20 @@ public class CajeroJpaController implements Serializable {
         }
     }
 
-    public Cajero findCajero(Integer id) {
+    public Cocinero findCocinero(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Cajero.class, id);
+            return em.find(Cocinero.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getCajeroCount() {
+    public int getCocineroCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Cajero> rt = cq.from(Cajero.class);
+            Root<Cocinero> rt = cq.from(Cocinero.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

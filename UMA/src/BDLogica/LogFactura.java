@@ -18,15 +18,16 @@ import Entidades.Pedido;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author USUARIO
  */
-public class FacturaJpaController implements Serializable {
+public class LogFactura implements Serializable {
 
-    public FacturaJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public LogFactura() {
+        this.emf = Persistence.createEntityManagerFactory("UMAPU");
     }
     private EntityManagerFactory emf = null;
 

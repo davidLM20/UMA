@@ -23,9 +23,9 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author USUARIO
  */
-public class FeedbackJpaController implements Serializable {
+public class LogFeedback implements Serializable {
 
-    public FeedbackJpaController(EntityManagerFactory emf) {
+    public LogFeedback(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

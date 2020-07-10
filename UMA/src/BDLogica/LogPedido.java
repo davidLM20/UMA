@@ -23,15 +23,16 @@ import Entidades.Pedido;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author USUARIO
  */
-public class PedidoJpaController implements Serializable {
+public class LogPedido implements Serializable {
 
-    public PedidoJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public LogPedido() {
+        this.emf = Persistence.createEntityManagerFactory("UMAPU");
     }
     private EntityManagerFactory emf = null;
 
