@@ -8,6 +8,7 @@ package Entidades;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -55,9 +57,9 @@ public class Plato implements Serializable {
     @Column(name = "tiempo")
     private double tiempo;
     @ManyToMany(mappedBy = "platoCollection")
-    private Collection<Pedido> pedidoCollection;
-    @ManyToMany(mappedBy = "platoCollection")
     private Collection<Menu> menuCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPlato")
+    private Collection<PlatoPedido> platopedidoCollection;
 
     public Plato() {
     }
@@ -115,21 +117,21 @@ public class Plato implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Pedido> getPedidoCollection() {
-        return pedidoCollection;
-    }
-
-    public void setPedidoCollection(Collection<Pedido> pedidoCollection) {
-        this.pedidoCollection = pedidoCollection;
-    }
-
-    @XmlTransient
     public Collection<Menu> getMenuCollection() {
         return menuCollection;
     }
 
     public void setMenuCollection(Collection<Menu> menuCollection) {
         this.menuCollection = menuCollection;
+    }
+
+    @XmlTransient
+    public Collection<PlatoPedido> getPlatopedidoCollection() {
+        return platopedidoCollection;
+    }
+
+    public void setPlatopedidoCollection(Collection<PlatoPedido> platopedidoCollection) {
+        this.platopedidoCollection = platopedidoCollection;
     }
 
     @Override

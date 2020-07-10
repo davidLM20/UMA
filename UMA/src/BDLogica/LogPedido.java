@@ -15,23 +15,25 @@ import javax.persistence.criteria.Root;
 import Entidades.Cajero;
 import Entidades.Cocinero;
 import Entidades.Mesero;
+import Entidades.Factura;
+import Entidades.Pedido;
 import Entidades.Plato;
 import java.util.ArrayList;
 import java.util.Collection;
-import Entidades.Factura;
-import Entidades.Pedido;
+import Entidades.PlatoPedido;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author USUARIO
  */
-public class PedidoJpaController implements Serializable {
+public class LogPedido implements Serializable {
 
-    public PedidoJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public LogPedido() {
+        this.emf = Persistence.createEntityManagerFactory("UMAPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -40,11 +42,11 @@ public class PedidoJpaController implements Serializable {
     }
 
     public void create(Pedido pedido) {
-        if (pedido.getPlatoCollection() == null) {
-            pedido.setPlatoCollection(new ArrayList<Plato>());
-        }
         if (pedido.getFacturaCollection() == null) {
             pedido.setFacturaCollection(new ArrayList<Factura>());
+        }
+        if (pedido.getPlatopedidoCollection() == null) {
+            pedido.setPlatopedidoCollection(new ArrayList<PlatoPedido>());
         }
         EntityManager em = null;
         try {
@@ -65,18 +67,18 @@ public class PedidoJpaController implements Serializable {
                 idMesero = em.getReference(idMesero.getClass(), idMesero.getIdMesero());
                 pedido.setIdMesero(idMesero);
             }
-            Collection<Plato> attachedPlatoCollection = new ArrayList<Plato>();
-            for (Plato platoCollectionPlatoToAttach : pedido.getPlatoCollection()) {
-                platoCollectionPlatoToAttach = em.getReference(platoCollectionPlatoToAttach.getClass(), platoCollectionPlatoToAttach.getIdPlato());
-                attachedPlatoCollection.add(platoCollectionPlatoToAttach);
-            }
-            pedido.setPlatoCollection(attachedPlatoCollection);
             Collection<Factura> attachedFacturaCollection = new ArrayList<Factura>();
             for (Factura facturaCollectionFacturaToAttach : pedido.getFacturaCollection()) {
                 facturaCollectionFacturaToAttach = em.getReference(facturaCollectionFacturaToAttach.getClass(), facturaCollectionFacturaToAttach.getIdFactura());
                 attachedFacturaCollection.add(facturaCollectionFacturaToAttach);
             }
             pedido.setFacturaCollection(attachedFacturaCollection);
+            Collection<PlatoPedido> attachedPlatopedidoCollection = new ArrayList<PlatoPedido>();
+            for (PlatoPedido platopedidoCollectionPlatopedidoToAttach : pedido.getPlatopedidoCollection()) {
+                platopedidoCollectionPlatopedidoToAttach = em.getReference(platopedidoCollectionPlatopedidoToAttach.getClass(), platopedidoCollectionPlatopedidoToAttach.getIdPlatoPedido());
+                attachedPlatopedidoCollection.add(platopedidoCollectionPlatopedidoToAttach);
+            }
+            pedido.setPlatopedidoCollection(attachedPlatopedidoCollection);
             em.persist(pedido);
             if (idCajero != null) {
                 idCajero.getPedidoCollection().add(pedido);
@@ -90,10 +92,6 @@ public class PedidoJpaController implements Serializable {
                 idMesero.getPedidoCollection().add(pedido);
                 idMesero = em.merge(idMesero);
             }
-            for (Plato platoCollectionPlato : pedido.getPlatoCollection()) {
-                platoCollectionPlato.getPedidoCollection().add(pedido);
-                platoCollectionPlato = em.merge(platoCollectionPlato);
-            }
             for (Factura facturaCollectionFactura : pedido.getFacturaCollection()) {
                 Pedido oldIdPedidoOfFacturaCollectionFactura = facturaCollectionFactura.getIdPedido();
                 facturaCollectionFactura.setIdPedido(pedido);
@@ -101,6 +99,15 @@ public class PedidoJpaController implements Serializable {
                 if (oldIdPedidoOfFacturaCollectionFactura != null) {
                     oldIdPedidoOfFacturaCollectionFactura.getFacturaCollection().remove(facturaCollectionFactura);
                     oldIdPedidoOfFacturaCollectionFactura = em.merge(oldIdPedidoOfFacturaCollectionFactura);
+                }
+            }
+            for (PlatoPedido platopedidoCollectionPlatopedido : pedido.getPlatopedidoCollection()) {
+                Pedido oldIdPedidoOfPlatopedidoCollectionPlatopedido = platopedidoCollectionPlatopedido.getIdPedido();
+                platopedidoCollectionPlatopedido.setIdPedido(pedido);
+                platopedidoCollectionPlatopedido = em.merge(platopedidoCollectionPlatopedido);
+                if (oldIdPedidoOfPlatopedidoCollectionPlatopedido != null) {
+                    oldIdPedidoOfPlatopedidoCollectionPlatopedido.getPlatopedidoCollection().remove(platopedidoCollectionPlatopedido);
+                    oldIdPedidoOfPlatopedidoCollectionPlatopedido = em.merge(oldIdPedidoOfPlatopedidoCollectionPlatopedido);
                 }
             }
             em.getTransaction().commit();
@@ -123,10 +130,10 @@ public class PedidoJpaController implements Serializable {
             Cocinero idCocineroNew = pedido.getIdCocinero();
             Mesero idMeseroOld = persistentPedido.getIdMesero();
             Mesero idMeseroNew = pedido.getIdMesero();
-            Collection<Plato> platoCollectionOld = persistentPedido.getPlatoCollection();
-            Collection<Plato> platoCollectionNew = pedido.getPlatoCollection();
             Collection<Factura> facturaCollectionOld = persistentPedido.getFacturaCollection();
             Collection<Factura> facturaCollectionNew = pedido.getFacturaCollection();
+            Collection<PlatoPedido> platopedidoCollectionOld = persistentPedido.getPlatopedidoCollection();
+            Collection<PlatoPedido> platopedidoCollectionNew = pedido.getPlatopedidoCollection();
             List<String> illegalOrphanMessages = null;
             for (Factura facturaCollectionOldFactura : facturaCollectionOld) {
                 if (!facturaCollectionNew.contains(facturaCollectionOldFactura)) {
@@ -134,6 +141,14 @@ public class PedidoJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Factura " + facturaCollectionOldFactura + " since its idPedido field is not nullable.");
+                }
+            }
+            for (PlatoPedido platopedidoCollectionOldPlatopedido : platopedidoCollectionOld) {
+                if (!platopedidoCollectionNew.contains(platopedidoCollectionOldPlatopedido)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Platopedido " + platopedidoCollectionOldPlatopedido + " since its idPedido field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -151,13 +166,6 @@ public class PedidoJpaController implements Serializable {
                 idMeseroNew = em.getReference(idMeseroNew.getClass(), idMeseroNew.getIdMesero());
                 pedido.setIdMesero(idMeseroNew);
             }
-            Collection<Plato> attachedPlatoCollectionNew = new ArrayList<Plato>();
-            for (Plato platoCollectionNewPlatoToAttach : platoCollectionNew) {
-                platoCollectionNewPlatoToAttach = em.getReference(platoCollectionNewPlatoToAttach.getClass(), platoCollectionNewPlatoToAttach.getIdPlato());
-                attachedPlatoCollectionNew.add(platoCollectionNewPlatoToAttach);
-            }
-            platoCollectionNew = attachedPlatoCollectionNew;
-            pedido.setPlatoCollection(platoCollectionNew);
             Collection<Factura> attachedFacturaCollectionNew = new ArrayList<Factura>();
             for (Factura facturaCollectionNewFacturaToAttach : facturaCollectionNew) {
                 facturaCollectionNewFacturaToAttach = em.getReference(facturaCollectionNewFacturaToAttach.getClass(), facturaCollectionNewFacturaToAttach.getIdFactura());
@@ -165,6 +173,13 @@ public class PedidoJpaController implements Serializable {
             }
             facturaCollectionNew = attachedFacturaCollectionNew;
             pedido.setFacturaCollection(facturaCollectionNew);
+            Collection<PlatoPedido> attachedPlatopedidoCollectionNew = new ArrayList<PlatoPedido>();
+            for (PlatoPedido platopedidoCollectionNewPlatopedidoToAttach : platopedidoCollectionNew) {
+                platopedidoCollectionNewPlatopedidoToAttach = em.getReference(platopedidoCollectionNewPlatopedidoToAttach.getClass(), platopedidoCollectionNewPlatopedidoToAttach.getIdPlatoPedido());
+                attachedPlatopedidoCollectionNew.add(platopedidoCollectionNewPlatopedidoToAttach);
+            }
+            platopedidoCollectionNew = attachedPlatopedidoCollectionNew;
+            pedido.setPlatopedidoCollection(platopedidoCollectionNew);
             pedido = em.merge(pedido);
             if (idCajeroOld != null && !idCajeroOld.equals(idCajeroNew)) {
                 idCajeroOld.getPedidoCollection().remove(pedido);
@@ -190,18 +205,6 @@ public class PedidoJpaController implements Serializable {
                 idMeseroNew.getPedidoCollection().add(pedido);
                 idMeseroNew = em.merge(idMeseroNew);
             }
-            for (Plato platoCollectionOldPlato : platoCollectionOld) {
-                if (!platoCollectionNew.contains(platoCollectionOldPlato)) {
-                    platoCollectionOldPlato.getPedidoCollection().remove(pedido);
-                    platoCollectionOldPlato = em.merge(platoCollectionOldPlato);
-                }
-            }
-            for (Plato platoCollectionNewPlato : platoCollectionNew) {
-                if (!platoCollectionOld.contains(platoCollectionNewPlato)) {
-                    platoCollectionNewPlato.getPedidoCollection().add(pedido);
-                    platoCollectionNewPlato = em.merge(platoCollectionNewPlato);
-                }
-            }
             for (Factura facturaCollectionNewFactura : facturaCollectionNew) {
                 if (!facturaCollectionOld.contains(facturaCollectionNewFactura)) {
                     Pedido oldIdPedidoOfFacturaCollectionNewFactura = facturaCollectionNewFactura.getIdPedido();
@@ -210,6 +213,17 @@ public class PedidoJpaController implements Serializable {
                     if (oldIdPedidoOfFacturaCollectionNewFactura != null && !oldIdPedidoOfFacturaCollectionNewFactura.equals(pedido)) {
                         oldIdPedidoOfFacturaCollectionNewFactura.getFacturaCollection().remove(facturaCollectionNewFactura);
                         oldIdPedidoOfFacturaCollectionNewFactura = em.merge(oldIdPedidoOfFacturaCollectionNewFactura);
+                    }
+                }
+            }
+            for (PlatoPedido platopedidoCollectionNewPlatopedido : platopedidoCollectionNew) {
+                if (!platopedidoCollectionOld.contains(platopedidoCollectionNewPlatopedido)) {
+                    Pedido oldIdPedidoOfPlatopedidoCollectionNewPlatopedido = platopedidoCollectionNewPlatopedido.getIdPedido();
+                    platopedidoCollectionNewPlatopedido.setIdPedido(pedido);
+                    platopedidoCollectionNewPlatopedido = em.merge(platopedidoCollectionNewPlatopedido);
+                    if (oldIdPedidoOfPlatopedidoCollectionNewPlatopedido != null && !oldIdPedidoOfPlatopedidoCollectionNewPlatopedido.equals(pedido)) {
+                        oldIdPedidoOfPlatopedidoCollectionNewPlatopedido.getPlatopedidoCollection().remove(platopedidoCollectionNewPlatopedido);
+                        oldIdPedidoOfPlatopedidoCollectionNewPlatopedido = em.merge(oldIdPedidoOfPlatopedidoCollectionNewPlatopedido);
                     }
                 }
             }
@@ -250,6 +264,13 @@ public class PedidoJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Pedido (" + pedido + ") cannot be destroyed since the Factura " + facturaCollectionOrphanCheckFactura + " in its facturaCollection field has a non-nullable idPedido field.");
             }
+            Collection<PlatoPedido> platopedidoCollectionOrphanCheck = pedido.getPlatopedidoCollection();
+            for (PlatoPedido platopedidoCollectionOrphanCheckPlatopedido : platopedidoCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Pedido (" + pedido + ") cannot be destroyed since the Platopedido " + platopedidoCollectionOrphanCheckPlatopedido + " in its platopedidoCollection field has a non-nullable idPedido field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -267,11 +288,6 @@ public class PedidoJpaController implements Serializable {
             if (idMesero != null) {
                 idMesero.getPedidoCollection().remove(pedido);
                 idMesero = em.merge(idMesero);
-            }
-            Collection<Plato> platoCollection = pedido.getPlatoCollection();
-            for (Plato platoCollectionPlato : platoCollection) {
-                platoCollectionPlato.getPedidoCollection().remove(pedido);
-                platoCollectionPlato = em.merge(platoCollectionPlato);
             }
             em.remove(pedido);
             em.getTransaction().commit();
@@ -328,4 +344,44 @@ public class PedidoJpaController implements Serializable {
         }
     }
     
+    public Pedido BuscarPedido(int numPedido) {
+        List<Pedido> listaPedidos = findPedidoEntities();
+        Pedido result = null;
+        for(Pedido aux:listaPedidos){
+            if(aux.getNumeroPedido()==numPedido){
+                result = aux;
+            }
+        }
+        return result;
+    }
+    
+    public static void calcularTiempoAprox(Pedido pedido) {
+        
+        double tiempoTotal = calcularTiempoTotal(pedido);
+        double sumatoria = 0.00;
+        int n = 0;
+        for (PlatoPedido objPlatoPedido : pedido.getPlatopedidoCollection()) {
+            Plato plato = objPlatoPedido.getIdPlato();
+
+            double peso = calcularPesoPlato(objPlatoPedido, tiempoTotal);
+            sumatoria += ((plato.getTiempo() + ((2 * objPlatoPedido.getCantidad()) - 2)) * peso);
+            n += 1;
+
+        }
+        pedido.setTiempoAproximado((sumatoria+tiempoTotal)/2);
+
+    }
+
+    public static double calcularTiempoTotal(Pedido pedido) {
+        double tiempoTotal = 0.00;
+        for (PlatoPedido platoPedido : pedido.getPlatopedidoCollection()) {
+            tiempoTotal += platoPedido.getIdPlato().getTiempo()+ ((2 * platoPedido.getCantidad()) - 2);
+        }
+        return tiempoTotal;
+    }
+
+    public static double calcularPesoPlato(PlatoPedido platoPedido, double tiempoTotal) {
+        double peso = (platoPedido.getIdPlato().getTiempo() + ((2 * platoPedido.getCantidad()) - 2)) / tiempoTotal;
+        return peso;
+    }
 }

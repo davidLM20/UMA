@@ -5,11 +5,11 @@
  */
 package GUI;
 
-import CLases.Cliente;
-import CLases.Factura;
-import CLases.Pedido;
-import CLases.Plato;
-import CLases.PlatoPedido;
+import Entidades.Cliente;
+import Entidades.Factura;
+import Entidades.Pedido;
+import Entidades.Plato;
+import Entidades.PlatoPedido;
 import static GUI.AgregarPlato.ArrayPedidos;
 import static GUI.AgregarPlato.ArrayPlatos;
 import static GUI.AgregarPlato.objLogPedido;
@@ -19,7 +19,6 @@ import Logica.LogFactura;
 import Logica.LogMenu;
 import Logica.LogPedido;
 import Logica.LogPlato;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;

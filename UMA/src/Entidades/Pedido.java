@@ -15,8 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,6 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p")
     , @NamedQuery(name = "Pedido.findByIdPedido", query = "SELECT p FROM Pedido p WHERE p.idPedido = :idPedido")
+    , @NamedQuery(name = "Pedido.findByNumMesa", query = "SELECT p FROM Pedido p WHERE p.numMesa = :numMesa")
     , @NamedQuery(name = "Pedido.findByNumeroPedido", query = "SELECT p FROM Pedido p WHERE p.numeroPedido = :numeroPedido")
     , @NamedQuery(name = "Pedido.findByTiempoAproximado", query = "SELECT p FROM Pedido p WHERE p.tiempoAproximado = :tiempoAproximado")
     , @NamedQuery(name = "Pedido.findByEstado", query = "SELECT p FROM Pedido p WHERE p.estado = :estado")})
@@ -46,6 +45,8 @@ public class Pedido implements Serializable {
     @Basic(optional = false)
     @Column(name = "idPedido")
     private Integer idPedido;
+    @Column(name = "numMesa")
+    private Integer numMesa;
     @Basic(optional = false)
     @Column(name = "numeroPedido")
     private int numeroPedido;
@@ -54,13 +55,10 @@ public class Pedido implements Serializable {
     private Double tiempoAproximado;
     @Column(name = "estado")
     private Integer estado;
-    @JoinTable(name = "pedido_has_plato", joinColumns = {
-        @JoinColumn(name = "Pedido_idPedido", referencedColumnName = "idPedido")}, inverseJoinColumns = {
-        @JoinColumn(name = "Plato_idPlato", referencedColumnName = "idPlato")})
-    @ManyToMany
-    private Collection<Plato> platoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPedido")
     private Collection<Factura> facturaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPedido")
+    private Collection<PlatoPedido> platopedidoCollection;
     @JoinColumn(name = "idCajero", referencedColumnName = "idCajero")
     @ManyToOne
     private Cajero idCajero;
@@ -91,6 +89,14 @@ public class Pedido implements Serializable {
         this.idPedido = idPedido;
     }
 
+    public Integer getNumMesa() {
+        return numMesa;
+    }
+
+    public void setNumMesa(Integer numMesa) {
+        this.numMesa = numMesa;
+    }
+
     public int getNumeroPedido() {
         return numeroPedido;
     }
@@ -116,21 +122,21 @@ public class Pedido implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Plato> getPlatoCollection() {
-        return platoCollection;
-    }
-
-    public void setPlatoCollection(Collection<Plato> platoCollection) {
-        this.platoCollection = platoCollection;
-    }
-
-    @XmlTransient
     public Collection<Factura> getFacturaCollection() {
         return facturaCollection;
     }
 
     public void setFacturaCollection(Collection<Factura> facturaCollection) {
         this.facturaCollection = facturaCollection;
+    }
+
+    @XmlTransient
+    public Collection<PlatoPedido> getPlatopedidoCollection() {
+        return platopedidoCollection;
+    }
+
+    public void setPlatopedidoCollection(Collection<PlatoPedido> platopedidoCollection) {
+        this.platopedidoCollection = platopedidoCollection;
     }
 
     public Cajero getIdCajero() {
