@@ -5,16 +5,19 @@
  */
 package GUI;
 
-import CLases.Menu;
-import CLases.Mesero;
-import CLases.Pedido;
-import CLases.Plato;
-import CLases.PlatoPedido;
-import Logica.LogMenu;
-import Logica.LogPedido;
-import Logica.LogPlato;
+import BDLogica.LogMenu;
+import BDLogica.LogPedido;
+import BDLogica.LogPlato;
+import BDLogica.LogPlatopedido;
+import Entidades.Menu;
+import Entidades.Pedido;
+import Entidades.Plato;
+import Entidades.Platopedido;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -28,16 +31,18 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     /**
      * Creates new form RegistrarPedido
      */
-    static ArrayList<Plato> ArrayPlatos = new ArrayList<>();
-    static ArrayList<Pedido> ArrayPedidos = new ArrayList<>();
-    static ArrayList<PlatoPedido> ArrayPlatoPedidos = new ArrayList<>();
+    static List<Plato> ArrayPlatos;
+    static List<Pedido> ArrayPedidos;
+    static Collection<Platopedido> ArrayPlatoPedidos = new ArrayList<>();
     static LogPedido objLogPedido = new LogPedido();
     static Pedido objPedido = new Pedido();
     static LogPlato objLogPlato = new LogPlato();
     static Plato auxPlato = new Plato();
     static Menu objMenu = new Menu();
-    static LogMenu objLogMenu = new  LogMenu();
+    static LogMenu objLogMenu = new LogMenu();
+    static LogPlatopedido objLogPlatopedido = new LogPlatopedido();
     int rowSel = -1;
+    Pedido objPedidoCalculo = new Pedido();
 
     //Mesero mesero;
     public RegistrarPedido(/*Mesero mesero*/) {
@@ -61,8 +66,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextFieldNombreMesero = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldCodigoGeneral = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableListaGeneral = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
@@ -119,17 +122,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jTextFieldNombreMesero, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 240, -1));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 740, 10));
-
-        jLabel4.setText("Codigo Pedido:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
-
-        jTextFieldCodigoGeneral.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldCodigoGeneralActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextFieldCodigoGeneral, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, 100, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 660, 10));
 
         jTableListaGeneral.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -171,10 +164,10 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
                 jButtonAgregarPlato1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonAgregarPlato1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 430, -1, -1));
+        jPanel1.add(jButtonAgregarPlato1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 430, -1, -1));
 
         jLabel9.setText("Observacion:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 320, -1, 20));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 320, -1, 20));
 
         jSpinnerCantidadPlato.setModel(new javax.swing.SpinnerNumberModel(1, 1, 8, 1));
         jPanel1.add(jSpinnerCantidadPlato, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, -1, -1));
@@ -193,7 +186,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         jTextAreaObservacion.setRows(5);
         jScrollPane4.setViewportView(jTextAreaObservacion);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, 280, -1));
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 320, 280, -1));
 
         jLabel7.setText("Numero de pedido:");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
@@ -205,7 +198,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         });
         jPanel1.add(jTextFieldNumeroPedido3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 100, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 800, 480));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 750, 480));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -256,7 +249,7 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         });
         jPanel2.add(jButtonCrearPedido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, -1, -1));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 50, 510, 480));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 50, 510, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -265,94 +258,46 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldNombreMeseroActionPerformed
 
-    private void jTextFieldCodigoGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCodigoGeneralActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldCodigoGeneralActionPerformed
-
     private void jButtonBuscarNumero1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarNumero1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("...");
-        System.out.println(ArrayPlatos);
-        int numeroPedido;
+        LeerPedidos();
+        Pedido objPedido = new Pedido();
 
-        if (LogPedido.Existe()) {
-            try {
-
-                objLogPedido.LeerPedido(ArrayPedidos);
-            } catch (IOException ex) {
-                Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            numeroPedido = ArrayPedidos.get(ArrayPedidos.size() - 1).getNumeroPedido() + 1;
-
-        } else {
-            numeroPedido = 1;
-        }
-        objPedido.setNumeroPedido(numeroPedido);
-
-        this.jTextFieldNumeroPedido3.setText(String.valueOf(numeroPedido));
         try {
-            ArrayPlatos.removeAll(ArrayPlatos);
-
-            objLogPlato.LeerPlatos(ArrayPlatos);
-            ArrayPlatos = objLogMenu.MenuActivo().getListaPlatosMenu();
-            jTableListaGeneral.removeAll();
-            Object columnas[] = {"Nombre", "Descripcion", "Coste", "tiempo"};
-            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-            jTableListaGeneral.setModel(modelo);
-            for (Plato objAux : ArrayPlatos) {
-                Plato objPlato = objAux;
-                String NewValor[] = {
-                    objPlato.getNombre(),
-                    objPlato.getDescripcion(),
-                    String.valueOf(objPlato.getCosto()),
-                    String.valueOf(objPlato.getTiempo())
-                };
-                modelo.addRow(NewValor);
-            }
-
+            LeerPlatos();
         } catch (IOException ex) {
             Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
     }//GEN-LAST:event_jButtonBuscarNumero1ActionPerformed
 
     private void jButtonAgregarPlato1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarPlato1ActionPerformed
         // TODO add your handling code here:
         jSpinnerCantidadPlato.getValue();
-        int valorSpinner = (Integer) jSpinnerCantidadPlato.getValue();
+        int cantidad = (Integer) jSpinnerCantidadPlato.getValue();
         String observacion = jTextAreaObservacion.getText();
 
-        ArrayPlatoPedidos.removeAll(ArrayPlatoPedidos);
-        
-        objLogPedido.agregarPlatoPedido(objPedido, auxPlato, valorSpinner, 1, observacion);
-        
-        
-        objLogPedido.calcularTiempoAprox(objPedido);
-        
-        this.jTextFieldTiempoApr.setText(String.valueOf(objPedido.getTiempoAproximado()));
-        jTablePlatosPedido.removeAll();
-        
-        Object columnas[] = {"Nombre Plato", "Cantidad", "Observacion"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTablePlatosPedido.setModel(modelo);
-        
-        for (PlatoPedido objLogPedidoAux : objPedido.getListaPlatoPedido()) {
-            PlatoPedido objPedidoPla = objLogPedidoAux;
-            String NewValor[] = {
-                objPedidoPla.getPlato().getNombre(),
-                String.valueOf(objPedidoPla.getCantidad()),
-                objPedidoPla.getObservacion()
-            };
-            System.out.println(objPedidoPla);
-            modelo.addRow(NewValor);
+        //ArrayPlatoPedidos.removeAll(ArrayPlatoPedidos);
 
-        }
+        Platopedido objPlatopedido = new Platopedido();
+        objPlatopedido.setCantidad(cantidad);
+        objPlatopedido.setEstado(1);
+        objPlatopedido.setObservacion(observacion);
+        objPlatopedido.setIdPlato(auxPlato);
+        objPlatopedido.setIdPedido(objPedido);
+                
+        ArrayPlatoPedidos.add(objPlatopedido);
+        
+        //objPedido.setPlatopedidoCollection(ArrayPlatoPedidos);
+        objPedidoCalculo.setPlatopedidoCollection(ArrayPlatoPedidos);
+        objLogPedido.calcularTiempoAprox(objPedidoCalculo);
+
+        this.jTextFieldTiempoApr.setText(String.valueOf(objPedidoCalculo.getTiempoAproximado()));
+
+        ListarPlatoPedido();
+
     }//GEN-LAST:event_jButtonAgregarPlato1ActionPerformed
 
     private void jTextFieldNumeroMesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNumeroMesaActionPerformed
@@ -381,20 +326,70 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
 
     private void jButtonCrearPedido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearPedido1ActionPerformed
         int numeroMesa = Integer.parseInt(this.jTextFieldNumeroMesa.getText());
-        objPedido.setNumeroMesa(numeroMesa);
+        objPedido.setNumMesa(numeroMesa);
         objPedido.setEstado(1);
-        ArrayPedidos.add(objPedido);
-        try {
-            // TODO add your handling code here:
-            objLogPedido.EscribirPedido(ArrayPedidos);
-            System.out.println(ArrayPedidos);
-        } catch (IOException ex) {
-            Logger.getLogger(RegistrarPedido.class.getName()).log(Level.SEVERE, null, ex);
+        objPedido.setTiempoAproximado(Double.parseDouble(this.jTextFieldTiempoApr.getText()));
+        objLogPedido.create(objPedido);
+        Pedido NuevoPedido = objLogPedido.findPedidoEntities().get(objLogPedido.findPedidoEntities().size() - 1);
+        
+        for(Platopedido objPlatopedidoAux : ArrayPlatoPedidos){
+            objPlatopedidoAux.setIdPedido(NuevoPedido);
+            objLogPlatopedido.create(objPlatopedidoAux);
         }
-       
+        
+        System.out.println(ArrayPedidos);
+        
     }//GEN-LAST:event_jButtonCrearPedido1ActionPerformed
 
+    void LeerPedidos() {
+        System.out.println("...");
+        System.out.println(ArrayPlatos);
+        int numeroPedido = 1;
+        ArrayPedidos = objLogPedido.findPedidoEntities();
+        numeroPedido = ArrayPedidos.get(ArrayPedidos.size() - 1).getNumeroPedido() + 1;
+        objPedido.setNumeroPedido(numeroPedido);
+        this.jTextFieldNumeroPedido3.setText(String.valueOf(numeroPedido));
+    }
 
+    void LeerPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {     
+
+        ArrayPlatos = objLogPlato.findPlatoEntities();
+        ArrayPlatos = (List<Plato>) objLogMenu.MenuActivo().getPlatoCollection();
+        jTableListaGeneral.removeAll();
+        Object columnas[] = {"Nombre", "Descripcion", "Coste", "tiempo"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTableListaGeneral.setModel(modelo);
+        for (Plato objAux : ArrayPlatos) {
+            Plato objPlato = objAux;
+            String NewValor[] = {
+                objPlato.getNombre(),
+                objPlato.getDescripcion(),
+                String.valueOf(objPlato.getCosto()),
+                String.valueOf(objPlato.getTiempo())
+            };
+            modelo.addRow(NewValor);
+        }
+    }
+
+    void ListarPlatoPedido() {
+        jTablePlatosPedido.removeAll();
+
+        Object columnas[] = {"Nombre Plato", "Cantidad", "Observacion"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosPedido.setModel(modelo);
+
+        for (Platopedido objLogPedidoAux : ArrayPlatoPedidos) {
+            Platopedido objPedidoPla = objLogPedidoAux;
+            String NewValor[] = {
+                objPedidoPla.getIdPlato().getNombre(),
+                String.valueOf(objPedidoPla.getCantidad()),
+                objPedidoPla.getObservacion()
+            };
+            System.out.println(objPedidoPla);
+            modelo.addRow(NewValor);
+
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregarPlato1;
     private javax.swing.JButton jButtonBuscarNumero1;
@@ -404,7 +399,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -422,7 +416,6 @@ public class RegistrarPedido extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTableListaGeneral;
     private javax.swing.JTable jTablePlatosPedido;
     private javax.swing.JTextArea jTextAreaObservacion;
-    private javax.swing.JTextField jTextFieldCodigoGeneral;
     private javax.swing.JTextField jTextFieldNombreMesero;
     private javax.swing.JTextField jTextFieldNumeroMesa;
     private javax.swing.JTextField jTextFieldNumeroPedido3;

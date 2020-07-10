@@ -5,11 +5,14 @@
  */
 package GUI;
 
-import CLases.Plato;
-import Logica.LogPlato;
+
+
+import BDLogica.LogPlato;
+import Entidades.Plato;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +27,7 @@ public class RegistrarPlatos extends javax.swing.JInternalFrame {
      * Creates new form RegistrarPlatos
      */
     LogPlato objLogPlato = new LogPlato();
-    ArrayList<Plato> ArrayPlatos = new ArrayList<Plato>();
+    List ArrayPlatos;
 
     public RegistrarPlatos() {
         initComponents();
@@ -216,28 +219,26 @@ public class RegistrarPlatos extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonListarPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarPlatoActionPerformed
-        if (objLogPlato.Existe()) {
-            try {
-                leerPlatos();
-            } catch (IOException ex) {
-                Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            this.jTablePlatos.removeAll();
-            Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Estimado(m)"};
-            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-            jTablePlatos.setModel(modelo);
-            for (Object objAux : ArrayPlatos) {
-                Plato objPlato = (Plato) objAux;
-                String NewValor[] = {
-                    objPlato.getNombre(),
-                    String.valueOf(objPlato.getCosto()),
-                    objPlato.getDescripcion(),
-                    String.valueOf(objPlato.getTiempo())
-                };
-                modelo.addRow(NewValor);
-            }
+        try {
+            leerPlatos();
+        } catch (IOException ex) {
+            Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.jTablePlatos.removeAll();
+        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Estimado(m)"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatos.setModel(modelo);
+        for (Object objAux : ArrayPlatos) {
+            Plato objPlato = (Plato) objAux;
+            String NewValor[] = {
+                objPlato.getNombre(),
+                String.valueOf(objPlato.getCosto()),
+                objPlato.getDescripcion(),
+                String.valueOf(objPlato.getTiempo())
+            };
+            modelo.addRow(NewValor);
         }
     }//GEN-LAST:event_jButtonListarPlatoActionPerformed
 
@@ -246,25 +247,17 @@ public class RegistrarPlatos extends javax.swing.JInternalFrame {
         String descripcion = this.jTextAreaDescripcion.getText();
         Double costo = (Double) this.jSpinnerCosto.getValue();
         Double tiempo = (Double) this.jSpinnerTiempo.getValue();
-        Plato objPlato = objLogPlato.CrearPlato(nombre, descripcion, costo, tiempo);
-        ArrayPlatos.clear();
-        try {
-            leerPlatos();
-        } catch (IOException ex) {
-            Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ArrayPlatos.add(objPlato);
-        try {
-            objLogPlato.EscribirPlatos(ArrayPlatos);
-        } catch (IOException ex) {
-            Logger.getLogger(RegistrarPlatos.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        //crear objeto plato
+        Plato objPlato = new Plato(null, nombre, costo, descripcion, tiempo);
+        objLogPlato.create(objPlato);
+        
+        
     }//GEN-LAST:event_jButtonCrearPlatoActionPerformed
     void leerPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
-        ArrayPlatos.clear();
-        objLogPlato.LeerPlatos(ArrayPlatos);
+
+        ArrayPlatos = objLogPlato.findPlatoEntities();
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -5,13 +5,15 @@
  */
 package GUI;
 
-import CLases.Menu;
-import CLases.Mesero;
-import CLases.Plato;
-import Logica.LogMenu;
+import BDLogica.LogMenu;
+import BDLogica.LogPlato;
+import Entidades.Menu;
+import Entidades.Mesero;
+import Entidades.Plato;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +28,8 @@ public class MeseroCargarMenu extends javax.swing.JInternalFrame {
      * Creates new form MeseroCargarMenu
      */
     Mesero mesero;
-
+    static List<Plato> ArrayPlatos;
+    static LogPlato objLogPlato = new LogPlato();
     ArrayList<Menu> ArrayMenu = new ArrayList<>();
     LogMenu objLogMenu = new LogMenu();
     Menu objMenu = new Menu();
@@ -51,13 +54,18 @@ public class MeseroCargarMenu extends javax.swing.JInternalFrame {
         jButtonCargarMenu = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
-        setPreferredSize(new java.awt.Dimension(870, 400));
+        setClosable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setMaximumSize(new java.awt.Dimension(44, 25));
+        setMinimumSize(new java.awt.Dimension(544, 425));
+        setPreferredSize(new java.awt.Dimension(540, 425));
         setVisible(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic Medium", 1, 18)); // NOI18N
         jLabel1.setText("Cargar Menú del Día");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 230, 40));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 230, 40));
 
         jTableMenu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,34 +97,33 @@ public class MeseroCargarMenu extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarMenuActionPerformed
-        // TODO add your handling code here:
-
         try {
-            ArrayMenu.removeAll(ArrayMenu);
-            objLogMenu.LeerMenu(ArrayMenu);
-            objMenu = objLogMenu.MenuActivo();
-            
-            this.jTableMenu.removeAll();
-            Object columnas[] = {"Nombre", "descripcion"};
-            DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-            jTableMenu.setModel(modelo);
-            for (Plato objAux : objMenu.getListaPlatosMenu()) {
-                Plato objPlato = objAux;
-                String NewValor[] = {
-                    objPlato.getNombre(),
-                    objPlato.getDescripcion(),               
-                };
-                modelo.addRow(NewValor);
-            }
+            // TODO add your handling code here:
+            ListarMenu();
         } catch (IOException ex) {
             Logger.getLogger(MeseroCargarMenu.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MeseroCargarMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
     }//GEN-LAST:event_jButtonCargarMenuActionPerformed
-
+    void ListarMenu() throws IOException, FileNotFoundException, ClassNotFoundException {
+        ArrayPlatos = objLogPlato.findPlatoEntities();
+        ArrayPlatos = (List<Entidades.Plato>) objLogMenu.MenuActivo().getPlatoCollection();
+        jTableMenu.removeAll();
+        Object columnas[] = {"Nombre", "Descripcion", "Coste", "tiempo"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTableMenu.setModel(modelo);
+        for (Entidades.Plato objAux : ArrayPlatos) {
+            Entidades.Plato objPlato = objAux;
+            String NewValor[] = {
+                objPlato.getNombre(),
+                objPlato.getDescripcion(),
+                String.valueOf(objPlato.getCosto()),
+                String.valueOf(objPlato.getTiempo())
+            };
+            modelo.addRow(NewValor);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCargarMenu;

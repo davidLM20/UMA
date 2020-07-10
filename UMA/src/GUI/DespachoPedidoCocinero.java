@@ -5,16 +5,19 @@
  */
 package GUI;
 
-import CLases.Cocinero;
-import CLases.Pedido;
-import CLases.Plato;
-import CLases.PlatoPedido;
-import Logica.LogCocinero;
-import Logica.LogColaPedido;
-import Logica.LogPedido;
+import BDLogica.LogCocinero;
+import BDLogica.LogPedido;
+import BDLogica.LogPlatopedido;
+import BDLogica.exceptions.NonexistentEntityException;
+import Entidades.Pedido;
+import Entidades.Plato;
+import Entidades.Platopedido;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -31,26 +34,28 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
      * Creates new form DespachoPedidoCocinero
      */
     Pedido objPedido = new Pedido();
-    Pedido objPedidoActualizado = new Pedido();
 
-    PlatoPedido objPlatoPedido = new PlatoPedido();
-    PlatoPedido objPlatoPedido1 = new PlatoPedido();
+    Platopedido objPlatoPedido = new Platopedido();
 
     LogPedido objLogPedido = new LogPedido();
     LogCocinero objLogCocinero = new LogCocinero();
-    LogColaPedido objLogColaPedido = new LogColaPedido();
+    LogPlatopedido objLogPlatoPedido = new LogPlatopedido();
 
-    ArrayList<Pedido> ArrayPedidos = new ArrayList<Pedido>();
-    ArrayList<Cocinero> ArrayCocinero = new ArrayList<Cocinero>();
-    ArrayList<PlatoPedido> ArrayPlatosPedido = new ArrayList<PlatoPedido>();
-    ArrayList<Cocinero> cocinerosLogueados = new ArrayList<Cocinero>();
+    List ArrayPedidos;
+    List ArrayCocinero;
+    List ArrayPlatosPedido;
+    List cocinerosLogueados;
 
     static int rowPedido = -1;
+    static int rowPlatosPedidoSelect = -1;
 
     public DespachoPedidoCocinero() throws IOException, FileNotFoundException, ClassNotFoundException {
-        this.cocinerosLogueados = cocinerosLogueados;
         initComponents();
+        
+        this.cocinerosLogueados = cocinerosLogueados;
+        
         CargarCombos();
+        
     }
 
     /**
@@ -89,6 +94,11 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
                 "Numero Pedido", "Estado", "TiempoPedido"
             }
         ));
+        jTablePedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePedidosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTablePedidos);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 112, -1, 145));
@@ -165,215 +175,89 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActualizarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarPedidosActionPerformed
-        //String estado = null;
-        if (objLogPedido.Existe()) {
-
-            try {
-                leerPedidos();
-            } catch (IOException ex) {
-                Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
             ActualizarTablaPedido();
-
-        }
+       
     }//GEN-LAST:event_jButtonActualizarPedidosActionPerformed
 
     private void jButtonPlatoProcesadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlatoProcesadoActionPerformed
+        try {
+            FinalizarPlato(objPlatoPedido);
+        } catch (Exception ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        leerPlatosPedido();
+        ActivarBoton();
         
-        String estado = null;
-        int row = -1;
-        int row1 = -1;
-        try {
-            leerPedidos();
-        } catch (IOException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-//      
-        row = jTablePlatosPedido.getSelectedRow();
-        rowPedido = jTablePedidos.getSelectedRow();
-        ArrayPlatosPedido = ArrayPedidos.get(rowPedido).getListaPlatoPedido();
-        System.out.println(ArrayPlatosPedido);
-        objPlatoPedido = ArrayPlatosPedido.get(row);
-        objPlatoPedido.setEstado(3);
-        objPedido = ArrayPedidos.get(rowPedido);
-        System.out.println(objPedido);
-//        System.out.println("a."+objAux);
-//        System.out.println("b."+objPlatoPedido);
-        ArrayPlatosPedido.set(ArrayPlatosPedido.indexOf(objPlatoPedido), objPlatoPedido);
-//        System.out.println("2."+original);
-//        objPedidoActualizado = objPedido;
-        objPedidoActualizado.setListaPlatoPedido(ArrayPlatosPedido);
-//        System.out.println("3."+original);
-//        System.out.println(ArrayPedidos);
-        System.out.println(ArrayPedidos.indexOf(objPedido));
-        System.out.println(objPedidoActualizado);
-        ArrayPedidos.set(ArrayPedidos.indexOf(objPedido), objPedidoActualizado);
-        try {
-            LogPedido.EscribirPedido(ArrayPedidos);
-
-        } catch (IOException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            leerPedidos();
-        } catch (IOException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTablePlatosPedido.setModel(modelo);
-        objPedido = ArrayPedidos.get(rowPedido);
-        System.out.println(objPedido);
-
-        for (PlatoPedido objPlatoPedido : objPedido.getListaPlatoPedido()) {
-            if (objPlatoPedido.getEstado() == 1) {
-                estado = "Registrado";
-            } else if (objPlatoPedido.getEstado() == 2) {
-                estado = "Cocinando";
-            } else if (objPlatoPedido.getEstado() == 3) {
-                estado = "Finalizado";
-            }
-            String NewValor[] = {
-                objPlatoPedido.getPlato().getNombre(),
-                estado,
-                objPlatoPedido.getObservacion(),
-                String.valueOf(objPlatoPedido.getPlato().getTiempo()),
-                String.valueOf(objPlatoPedido.getCantidad())
-
-            };
-            System.out.println(objPlatoPedido);
-            modelo.addRow(NewValor);
-
-        }
-        try {
-            if(ComprobarPlatos(objPedido)){
-                this.jButtonDespacharPedido.setEnabled(true);
-            }else{
-                this.jButtonDespacharPedido.setEnabled(false);
-            };
-        } catch (IOException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
 
     }//GEN-LAST:event_jButtonPlatoProcesadoActionPerformed
 
     private void jButtonProcesarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarPedidoActionPerformed
-        String estado = null;
-        try {
-            leerPedidos();
-        } catch (IOException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        jTablePlatosPedido.removeAll();
-        rowPedido = this.jTablePedidos.getSelectedRow();
-        Pedido objAux = new Pedido();
-        objAux = ArrayPedidos.get(rowPedido);
-        objPedido = objAux;
-        //System.out.println("---" + objAux);
-        objAux.setEstado(2);
-        //System.out.println("+++" + objAux);
-//        ArrayPedidos.remove(ArrayPedidos.get(row));
-//        ArrayPedidos.add(row, objAux);
-//        
-//        System.out.println("pedidos actualizados");
-//        System.out.println(ArrayPedidos);
-        ArrayPedidos.set(ArrayPedidos.indexOf(objPedido), objAux);
-        try {
-            objLogPedido.EscribirPedido(ArrayPedidos);
-        } catch (IOException ex) {
-            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ActualizarTablaPedido();
-
-        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTablePlatosPedido.setModel(modelo);
-        objPedido = ArrayPedidos.get(rowPedido);
-        objPedidoActualizado = objPedido;
-
-        for (PlatoPedido objPlatoPedido : objPedido.getListaPlatoPedido()) {
+        
+        for (Object objAux : ArrayPlatosPedido) {
+            Platopedido objPlatoPedido = (Platopedido) objAux;
             if (objPlatoPedido.getEstado() == 1) {
-                estado = "Registrado";
-            } else if (objPlatoPedido.getEstado() == 2) {
-                estado = "Cocinando";
-            } else if (objPlatoPedido.getEstado() == 3) {
-                estado = "Finalizado";
+                try {
+                    cocinarPlato(objPlatoPedido);
+                } catch (Exception ex) {
+                    Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            String NewValor[] = {
-                objPlatoPedido.getPlato().getNombre(),
-                estado,
-                objPlatoPedido.getObservacion(),
-                String.valueOf(objPlatoPedido.getPlato().getTiempo()),
-                String.valueOf(objPlatoPedido.getCantidad())
-
-            };
-            System.out.println(objPlatoPedido);
-            modelo.addRow(NewValor);
 
         }
-        ArrayPlatosPedido = ArrayPedidos.get(rowPedido).getListaPlatoPedido();
-        objPedido = objAux;
+        objPedido.setEstado(2);
         try {
-            if(ComprobarPlatos(objPedido)){
-                this.jButtonDespacharPedido.setEnabled(true);
-            }else{
-                this.jButtonDespacharPedido.setEnabled(false);
-            };
-        } catch (IOException ex) {
+            objLogPedido.edit(objPedido);
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
         }
+        leerPlatosPedido();
+        ActualizarTablaPedido();
+        ActivarBoton();
+        
+
+
     }//GEN-LAST:event_jButtonProcesarPedidoActionPerformed
 
     private void jTablePlatosPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePlatosPedidoMouseClicked
 
+        rowPlatosPedidoSelect = jTablePlatosPedido.getSelectedRow();
+        objPlatoPedido = (Platopedido) ArrayPlatosPedido.get(rowPlatosPedidoSelect);
 
     }//GEN-LAST:event_jTablePlatosPedidoMouseClicked
 
     private void jButtonDespacharPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDespacharPedidoActionPerformed
-        int row = -1;
-        row = jTablePedidos.getSelectedRow();
-        Pedido objAux = new Pedido();
-        objAux = ArrayPedidos.get(row);
-        objAux.setEstado(3);
-        ArrayPedidos.set(row, objAux);
-        //ArrayPedidos.remove(row);
-        objLogColaPedido.eliminarPedido(objAux);
+
+        objPedido.setEstado(3);
         try {
-            objLogPedido.EscribirPedido(ArrayPedidos);
-        } catch (IOException ex) {
+            objLogPedido.edit(objPedido);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        JOptionPane.showMessageDialog(null, "Pedido Despachado");
         ActualizarTablaPedido();
 
 
     }//GEN-LAST:event_jButtonDespacharPedidoActionPerformed
-    public void leerPedidos() throws IOException, FileNotFoundException, ClassNotFoundException {
-        ArrayPedidos.clear();
-        objLogPedido.LeerPedido(ArrayPedidos);
-    }
+
+    private void jTablePedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePedidosMouseClicked
+        rowPedido = jTablePedidos.getSelectedRow();
+        objPedido = (Pedido) ArrayPedidos.get(rowPedido);
+        ArrayPlatosPedido = (List<Platopedido>) objPedido.getPlatopedidoCollection();
+    }//GEN-LAST:event_jTablePedidosMouseClicked
+    
 
     public void CargarCombos() throws IOException, FileNotFoundException, ClassNotFoundException {
-        this.jComboBoxCocinero.setModel(new DefaultComboBoxModel(LogCocinero.CargarCocinero().toArray()));
+        this.jComboBoxCocinero.setModel(new DefaultComboBoxModel(objLogCocinero.findCocineroEntities().toArray()));
 
     }
 
     public void ActualizarTablaPedido() {
+        ArrayPedidos = objLogPedido.findPedidoEntities();
         String estado = null;
         this.jTablePedidos.removeAll();
         Object columnas[] = {"Numero de pedido", "Estado", "Tiempo Estimado(m)"};
@@ -402,13 +286,28 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     }
 
     public boolean ComprobarPlatos(Pedido pedido) throws IOException, FileNotFoundException, ClassNotFoundException {
-        leerPedidos();
-        for (PlatoPedido objPlatoPedido : pedido.getListaPlatoPedido()) {
+
+        for (Platopedido objPlatoPedido : pedido.getPlatopedidoCollection()) {
             if (objPlatoPedido.getEstado() != 3) {
                 return false;
             }
         }
         return true;
+    }
+
+    public void ActivarBoton() {
+        //objPedido = objLogPedido.findPedido(objPedido.getIdPedido());
+        try {
+            if (ComprobarPlatos(objPedido)) {
+                this.jButtonDespacharPedido.setEnabled(true);
+            } else {
+                this.jButtonDespacharPedido.setEnabled(false);
+            };
+        } catch (IOException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DespachoPedidoCocinero.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 
@@ -427,4 +326,47 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTablePedidos;
     private javax.swing.JTable jTablePlatosPedido;
     // End of variables declaration//GEN-END:variables
+
+    public void leerPlatosPedido() {
+        String estado = null;
+
+        jTablePlatosPedido.removeAll();
+        Object columnas[] = {"Nombre", "Estado", "Observacion", "Tiempo", "Cantidad"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+        jTablePlatosPedido.setModel(modelo);
+        objPedido = (Pedido) ArrayPedidos.get(rowPedido);
+        
+
+        for (Object objAux : ArrayPlatosPedido) {
+            Platopedido objPlatoPedido = (Platopedido) objAux;
+            if (objPlatoPedido.getEstado() == 1) {
+                estado = "Registrado";
+            } else if (objPlatoPedido.getEstado() == 2) {
+                estado = "Cocinando";
+            } else if (objPlatoPedido.getEstado() == 3) {
+                estado = "Finalizado";
+            }
+            String NewValor[] = {
+                objPlatoPedido.getIdPlato().getNombre(),
+                estado,
+                objPlatoPedido.getObservacion(),
+                String.valueOf(objPlatoPedido.getIdPlato().getTiempo()),
+                String.valueOf(objPlatoPedido.getCantidad())
+
+            };
+            System.out.println(objPlatoPedido);
+            modelo.addRow(NewValor);
+
+        }
+    }
+
+    void cocinarPlato(Platopedido objPlatoPedido) throws Exception {
+        objPlatoPedido.setEstado(2);
+        objLogPlatoPedido.edit(objPlatoPedido);
+    }
+
+    private void FinalizarPlato(Platopedido objPlatoPedido) throws Exception {
+        objPlatoPedido.setEstado(3);
+        objLogPlatoPedido.edit(objPlatoPedido);
+    }
 }
