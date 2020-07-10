@@ -27,10 +27,11 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
 
     LogPlato objLogPlato = new LogPlato();
     List ArrayPlatos;
-
+    
     LogMenu objLogMenu = new LogMenu();
     List ArrayMenu;
-
+    Menu objMenu = null;
+    Collection PlatosMenu=null;
     int rowSelPlato = -1;
     int rowSelMenu = -1;
     int rowSelPlatoMenu = -1;
@@ -473,9 +474,9 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
         Menu objAuxMenu = (Menu)ArrayMenu.get(rowSelMenu);
 //        objAuxMenu.listaPlatosMenu.add(objAuxPlato);
         //System.out.println(objAuxMenu);
-         Collection nuevo = objAuxMenu.getPlatoCollection();
-         nuevo.add(objAuxPlato);
-         objAuxMenu.setPlatoCollection(nuevo);
+         PlatosMenu = objAuxMenu.getPlatoCollection();
+         PlatosMenu.add(objAuxPlato);
+         objAuxMenu.setPlatoCollection(PlatosMenu);
         try {
             objLogMenu.edit(objAuxMenu);
             //System.out.println(ArrayMenu);
@@ -483,21 +484,7 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             Logger.getLogger(AdministrarMenus.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        this.jTablePlatosMenu.removeAll();
-        Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Aprox."};
-        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
-        jTablePlatosMenu.setModel(modelo);
-        for (Object aux : ArrayPlatos) {
-            Plato objAux = (Plato) aux;
-            String NewValor[] = {
-                objAux.getNombre(),
-                String.valueOf(objAux.getCosto()),
-                objAux.getDescripcion(),
-                String.valueOf(objAux.getTiempo())
-            };
-            modelo.addRow(NewValor);
-        }
+        leerPlatosMenu();
     }//GEN-LAST:event_jButtonAgregarMenuActionPerformed
 
     private void jButtonListarMenusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarMenusActionPerformed
@@ -620,12 +607,22 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
     private void jTableListaMenusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableListaMenusMouseClicked
         rowSelMenu = this.jTableListaMenus.getSelectedRow();
         Menu aux = (Menu) ArrayMenu.get(rowSelMenu);
-        Collection temp = aux.getPlatoCollection();
+        PlatosMenu = aux.getPlatoCollection();
+        leerPlatosMenu();
+    }//GEN-LAST:event_jTableListaMenusMouseClicked
+
+    void leerPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
+
+        ArrayPlatos = objLogPlato.findPlatoEntities();
+
+    }
+    
+    void leerPlatosMenu(){
         this.jTablePlatosMenu.removeAll();
         Object columnas[] = {"Nombre", "Costo", "Descripcion", "Tiempo Aprox."};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
         jTablePlatosMenu.setModel(modelo);
-        for (Object Aux : temp) {
+        for (Object Aux : PlatosMenu) {
             Plato objAux = (Plato) Aux;
             String NewValor[] = {
                 objAux.getNombre(),
@@ -635,14 +632,8 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
             };
             modelo.addRow(NewValor);
         }
-    }//GEN-LAST:event_jTableListaMenusMouseClicked
-
-    void leerPlatos() throws IOException, FileNotFoundException, ClassNotFoundException {
-
-        ArrayPlatos = objLogPlato.findPlatoEntities();
-
     }
-
+    
     void leerMenus() throws IOException, FileNotFoundException, ClassNotFoundException {
 
         ArrayMenu = objLogMenu.findMenuEntities();

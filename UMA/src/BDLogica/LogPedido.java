@@ -17,6 +17,7 @@ import Entidades.Cocinero;
 import Entidades.Mesero;
 import Entidades.Factura;
 import Entidades.Pedido;
+import Entidades.Plato;
 import java.util.ArrayList;
 import java.util.Collection;
 import Entidades.Platopedido;
@@ -343,4 +344,44 @@ public class LogPedido implements Serializable {
         }
     }
     
+    public Pedido BuscarPedido(int numPedido) {
+        List<Pedido> listaPedidos = findPedidoEntities();
+        Pedido result = null;
+        for(Pedido aux:listaPedidos){
+            if(aux.getNumeroPedido()==numPedido){
+                result = aux;
+            }
+        }
+        return result;
+    }
+    
+    public static void calcularTiempoAprox(Pedido pedido) {
+        
+        double tiempoTotal = calcularTiempoTotal(pedido);
+        double sumatoria = 0.00;
+        int n = 0;
+        for (Platopedido objPlatoPedido : pedido.getPlatopedidoCollection()) {
+            Plato plato = objPlatoPedido.getIdPlato();
+
+            double peso = calcularPesoPlato(objPlatoPedido, tiempoTotal);
+            sumatoria += ((plato.getTiempo() + ((2 * objPlatoPedido.getCantidad()) - 2)) * peso);
+            n += 1;
+
+        }
+        pedido.setTiempoAproximado((sumatoria+tiempoTotal)/2);
+
+    }
+
+    public static double calcularTiempoTotal(Pedido pedido) {
+        double tiempoTotal = 0.00;
+        for (Platopedido platoPedido : pedido.getPlatopedidoCollection()) {
+            tiempoTotal += platoPedido.getIdPlato().getTiempo()+ ((2 * platoPedido.getCantidad()) - 2);
+        }
+        return tiempoTotal;
+    }
+
+    public static double calcularPesoPlato(Platopedido platoPedido, double tiempoTotal) {
+        double peso = (platoPedido.getIdPlato().getTiempo() + ((2 * platoPedido.getCantidad()) - 2)) / tiempoTotal;
+        return peso;
+    }
 }
