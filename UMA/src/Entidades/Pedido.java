@@ -58,7 +58,7 @@ public class Pedido implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPedido")
     private Collection<Factura> facturaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPedido")
-    private Collection<PlatoPedido> platopedidoCollection;
+    private Collection<Platopedido> platopedidoCollection;
     @JoinColumn(name = "idCajero", referencedColumnName = "idCajero")
     @ManyToOne
     private Cajero idCajero;
@@ -131,11 +131,11 @@ public class Pedido implements Serializable {
     }
 
     @XmlTransient
-    public Collection<PlatoPedido> getPlatopedidoCollection() {
+    public Collection<Platopedido> getPlatopedidoCollection() {
         return platopedidoCollection;
     }
 
-    public void setPlatopedidoCollection(Collection<PlatoPedido> platopedidoCollection) {
+    public void setPlatopedidoCollection(Collection<Platopedido> platopedidoCollection) {
         this.platopedidoCollection = platopedidoCollection;
     }
 

@@ -13,7 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Entidades.Pedido;
 import Entidades.Plato;
-import Entidades.PlatoPedido;
+import Entidades.Platopedido;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,7 +34,7 @@ public class LogPlatopedido implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(PlatoPedido platopedido) {
+    public void create(Platopedido platopedido) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -66,12 +66,12 @@ public class LogPlatopedido implements Serializable {
         }
     }
 
-    public void edit(PlatoPedido platopedido) throws NonexistentEntityException, Exception {
+    public void edit(Platopedido platopedido) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            PlatoPedido persistentPlatopedido = em.find(PlatoPedido.class, platopedido.getIdPlatoPedido());
+            Platopedido persistentPlatopedido = em.find(Platopedido.class, platopedido.getIdPlatoPedido());
             Pedido idPedidoOld = persistentPlatopedido.getIdPedido();
             Pedido idPedidoNew = platopedido.getIdPedido();
             Plato idPlatoOld = persistentPlatopedido.getIdPlato();
@@ -123,9 +123,9 @@ public class LogPlatopedido implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            PlatoPedido platopedido;
+            Platopedido platopedido;
             try {
-                platopedido = em.getReference(PlatoPedido.class, id);
+                platopedido = em.getReference(Platopedido.class, id);
                 platopedido.getIdPlatoPedido();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The platopedido with id " + id + " no longer exists.", enfe);
@@ -149,19 +149,19 @@ public class LogPlatopedido implements Serializable {
         }
     }
 
-    public List<PlatoPedido> findPlatopedidoEntities() {
+    public List<Platopedido> findPlatopedidoEntities() {
         return findPlatopedidoEntities(true, -1, -1);
     }
 
-    public List<PlatoPedido> findPlatopedidoEntities(int maxResults, int firstResult) {
+    public List<Platopedido> findPlatopedidoEntities(int maxResults, int firstResult) {
         return findPlatopedidoEntities(false, maxResults, firstResult);
     }
 
-    private List<PlatoPedido> findPlatopedidoEntities(boolean all, int maxResults, int firstResult) {
+    private List<Platopedido> findPlatopedidoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(PlatoPedido.class));
+            cq.select(cq.from(Platopedido.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -173,10 +173,10 @@ public class LogPlatopedido implements Serializable {
         }
     }
 
-    public PlatoPedido findPlatopedido(Integer id) {
+    public Platopedido findPlatopedido(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(PlatoPedido.class, id);
+            return em.find(Platopedido.class, id);
         } finally {
             em.close();
         }
@@ -186,7 +186,7 @@ public class LogPlatopedido implements Serializable {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<PlatoPedido> rt = cq.from(PlatoPedido.class);
+            Root<Platopedido> rt = cq.from(Platopedido.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

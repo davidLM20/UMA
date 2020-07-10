@@ -16,7 +16,7 @@ import Entidades.Menu;
 import Entidades.Plato;
 import java.util.ArrayList;
 import java.util.Collection;
-import Entidades.PlatoPedido;
+import Entidades.Platopedido;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -42,7 +42,7 @@ public class LogPlato implements Serializable {
             plato.setMenuCollection(new ArrayList<Menu>());
         }
         if (plato.getPlatopedidoCollection() == null) {
-            plato.setPlatopedidoCollection(new ArrayList<PlatoPedido>());
+            plato.setPlatopedidoCollection(new ArrayList<Platopedido>());
         }
         EntityManager em = null;
         try {
@@ -54,8 +54,8 @@ public class LogPlato implements Serializable {
                 attachedMenuCollection.add(menuCollectionMenuToAttach);
             }
             plato.setMenuCollection(attachedMenuCollection);
-            Collection<PlatoPedido> attachedPlatopedidoCollection = new ArrayList<PlatoPedido>();
-            for (PlatoPedido platopedidoCollectionPlatopedidoToAttach : plato.getPlatopedidoCollection()) {
+            Collection<Platopedido> attachedPlatopedidoCollection = new ArrayList<Platopedido>();
+            for (Platopedido platopedidoCollectionPlatopedidoToAttach : plato.getPlatopedidoCollection()) {
                 platopedidoCollectionPlatopedidoToAttach = em.getReference(platopedidoCollectionPlatopedidoToAttach.getClass(), platopedidoCollectionPlatopedidoToAttach.getIdPlatoPedido());
                 attachedPlatopedidoCollection.add(platopedidoCollectionPlatopedidoToAttach);
             }
@@ -65,7 +65,7 @@ public class LogPlato implements Serializable {
                 menuCollectionMenu.getPlatoCollection().add(plato);
                 menuCollectionMenu = em.merge(menuCollectionMenu);
             }
-            for (PlatoPedido platopedidoCollectionPlatopedido : plato.getPlatopedidoCollection()) {
+            for (Platopedido platopedidoCollectionPlatopedido : plato.getPlatopedidoCollection()) {
                 Plato oldIdPlatoOfPlatopedidoCollectionPlatopedido = platopedidoCollectionPlatopedido.getIdPlato();
                 platopedidoCollectionPlatopedido.setIdPlato(plato);
                 platopedidoCollectionPlatopedido = em.merge(platopedidoCollectionPlatopedido);
@@ -90,10 +90,10 @@ public class LogPlato implements Serializable {
             Plato persistentPlato = em.find(Plato.class, plato.getIdPlato());
             Collection<Menu> menuCollectionOld = persistentPlato.getMenuCollection();
             Collection<Menu> menuCollectionNew = plato.getMenuCollection();
-            Collection<PlatoPedido> platopedidoCollectionOld = persistentPlato.getPlatopedidoCollection();
-            Collection<PlatoPedido> platopedidoCollectionNew = plato.getPlatopedidoCollection();
+            Collection<Platopedido> platopedidoCollectionOld = persistentPlato.getPlatopedidoCollection();
+            Collection<Platopedido> platopedidoCollectionNew = plato.getPlatopedidoCollection();
             List<String> illegalOrphanMessages = null;
-            for (PlatoPedido platopedidoCollectionOldPlatopedido : platopedidoCollectionOld) {
+            for (Platopedido platopedidoCollectionOldPlatopedido : platopedidoCollectionOld) {
                 if (!platopedidoCollectionNew.contains(platopedidoCollectionOldPlatopedido)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
@@ -111,8 +111,8 @@ public class LogPlato implements Serializable {
             }
             menuCollectionNew = attachedMenuCollectionNew;
             plato.setMenuCollection(menuCollectionNew);
-            Collection<PlatoPedido> attachedPlatopedidoCollectionNew = new ArrayList<PlatoPedido>();
-            for (PlatoPedido platopedidoCollectionNewPlatopedidoToAttach : platopedidoCollectionNew) {
+            Collection<Platopedido> attachedPlatopedidoCollectionNew = new ArrayList<Platopedido>();
+            for (Platopedido platopedidoCollectionNewPlatopedidoToAttach : platopedidoCollectionNew) {
                 platopedidoCollectionNewPlatopedidoToAttach = em.getReference(platopedidoCollectionNewPlatopedidoToAttach.getClass(), platopedidoCollectionNewPlatopedidoToAttach.getIdPlatoPedido());
                 attachedPlatopedidoCollectionNew.add(platopedidoCollectionNewPlatopedidoToAttach);
             }
@@ -131,7 +131,7 @@ public class LogPlato implements Serializable {
                     menuCollectionNewMenu = em.merge(menuCollectionNewMenu);
                 }
             }
-            for (PlatoPedido platopedidoCollectionNewPlatopedido : platopedidoCollectionNew) {
+            for (Platopedido platopedidoCollectionNewPlatopedido : platopedidoCollectionNew) {
                 if (!platopedidoCollectionOld.contains(platopedidoCollectionNewPlatopedido)) {
                     Plato oldIdPlatoOfPlatopedidoCollectionNewPlatopedido = platopedidoCollectionNewPlatopedido.getIdPlato();
                     platopedidoCollectionNewPlatopedido.setIdPlato(plato);
@@ -172,8 +172,8 @@ public class LogPlato implements Serializable {
                 throw new NonexistentEntityException("The plato with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<PlatoPedido> platopedidoCollectionOrphanCheck = plato.getPlatopedidoCollection();
-            for (PlatoPedido platopedidoCollectionOrphanCheckPlatopedido : platopedidoCollectionOrphanCheck) {
+            Collection<Platopedido> platopedidoCollectionOrphanCheck = plato.getPlatopedidoCollection();
+            for (Platopedido platopedidoCollectionOrphanCheckPlatopedido : platopedidoCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }

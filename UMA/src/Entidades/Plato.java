@@ -59,7 +59,7 @@ public class Plato implements Serializable {
     @ManyToMany(mappedBy = "platoCollection")
     private Collection<Menu> menuCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPlato")
-    private Collection<PlatoPedido> platopedidoCollection;
+    private Collection<Platopedido> platopedidoCollection;
 
     public Plato() {
     }
@@ -126,11 +126,11 @@ public class Plato implements Serializable {
     }
 
     @XmlTransient
-    public Collection<PlatoPedido> getPlatopedidoCollection() {
+    public Collection<Platopedido> getPlatopedidoCollection() {
         return platopedidoCollection;
     }
 
-    public void setPlatopedidoCollection(Collection<PlatoPedido> platopedidoCollection) {
+    public void setPlatopedidoCollection(Collection<Platopedido> platopedidoCollection) {
         this.platopedidoCollection = platopedidoCollection;
     }
 

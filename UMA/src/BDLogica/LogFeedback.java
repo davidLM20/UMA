@@ -18,15 +18,16 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author USUARIO
  */
-public class FeedbackJpaController implements Serializable {
+public class LogFeedback implements Serializable {
 
-    public FeedbackJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public LogFeedback() {
+        this.emf = Persistence.createEntityManagerFactory("UMAPU");
     }
     private EntityManagerFactory emf = null;
 

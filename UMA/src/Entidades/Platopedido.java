@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Platopedido.findByCantidad", query = "SELECT p FROM Platopedido p WHERE p.cantidad = :cantidad")
     , @NamedQuery(name = "Platopedido.findByEstado", query = "SELECT p FROM Platopedido p WHERE p.estado = :estado")
     , @NamedQuery(name = "Platopedido.findByObservacion", query = "SELECT p FROM Platopedido p WHERE p.observacion = :observacion")})
-public class PlatoPedido implements Serializable {
+public class Platopedido implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,14 +56,14 @@ public class PlatoPedido implements Serializable {
     @ManyToOne(optional = false)
     private Plato idPlato;
 
-    public PlatoPedido() {
+    public Platopedido() {
     }
 
-    public PlatoPedido(Integer idPlatoPedido) {
+    public Platopedido(Integer idPlatoPedido) {
         this.idPlatoPedido = idPlatoPedido;
     }
 
-    public PlatoPedido(Integer idPlatoPedido, int cantidad, int estado, String observacion) {
+    public Platopedido(Integer idPlatoPedido, int cantidad, int estado, String observacion) {
         this.idPlatoPedido = idPlatoPedido;
         this.cantidad = cantidad;
         this.estado = estado;
@@ -128,10 +128,10 @@ public class PlatoPedido implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PlatoPedido)) {
+        if (!(object instanceof Platopedido)) {
             return false;
         }
-        PlatoPedido other = (PlatoPedido) object;
+        Platopedido other = (Platopedido) object;
         if ((this.idPlatoPedido == null && other.idPlatoPedido != null) || (this.idPlatoPedido != null && !this.idPlatoPedido.equals(other.idPlatoPedido))) {
             return false;
         }

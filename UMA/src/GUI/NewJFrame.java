@@ -24,7 +24,7 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     MeseroCargarMenu mCmenu;
     RegistrarPedido rPedido;
-//    FacturaPantalla factura;
+    FacturaPantalla factura;
 
     DespachoPedidoCocinero dPedido = null;
     RegistrarEmpleado rEmpleado = null;
@@ -265,17 +265,17 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jMenuItCajeroFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItCajeroFacturaActionPerformed
         // TODO add your handling code here:
-//        liberar();
-//        if (factura == null) {
-//            factura = new FacturaPantalla();
-//            jDesktopPrincipal.add(factura);
-//            factura.setVisible(true);
-//
-//        } else if (factura.isClosed()) {
-//            factura = new FacturaPantalla();
-//            jDesktopPrincipal.add(factura);
-//            factura.setVisible(true);
-//        }
+        liberar();
+        if (factura == null) {
+            factura = new FacturaPantalla();
+            jDesktopPrincipal.add(factura);
+            factura.setVisible(true);
+
+        } else if (factura.isClosed()) {
+            factura = new FacturaPantalla();
+            jDesktopPrincipal.add(factura);
+            factura.setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItCajeroFacturaActionPerformed
 
     private void jMenuItemCargarMenuActionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,10 +358,10 @@ public class NewJFrame extends javax.swing.JFrame {
             administrarMenus.dispose();
             administrarMenus = null;
         }
-//        if (factura != null) {
-//            factura.dispose();
-//            factura = null;
-//        }
+        if (factura != null) {
+            factura.dispose();
+            factura = null;
+        }
     }
 
 

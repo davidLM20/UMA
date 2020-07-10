@@ -17,10 +17,9 @@ import Entidades.Cocinero;
 import Entidades.Mesero;
 import Entidades.Factura;
 import Entidades.Pedido;
-import Entidades.Plato;
 import java.util.ArrayList;
 import java.util.Collection;
-import Entidades.PlatoPedido;
+import Entidades.Platopedido;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -46,7 +45,7 @@ public class LogPedido implements Serializable {
             pedido.setFacturaCollection(new ArrayList<Factura>());
         }
         if (pedido.getPlatopedidoCollection() == null) {
-            pedido.setPlatopedidoCollection(new ArrayList<PlatoPedido>());
+            pedido.setPlatopedidoCollection(new ArrayList<Platopedido>());
         }
         EntityManager em = null;
         try {
@@ -73,8 +72,8 @@ public class LogPedido implements Serializable {
                 attachedFacturaCollection.add(facturaCollectionFacturaToAttach);
             }
             pedido.setFacturaCollection(attachedFacturaCollection);
-            Collection<PlatoPedido> attachedPlatopedidoCollection = new ArrayList<PlatoPedido>();
-            for (PlatoPedido platopedidoCollectionPlatopedidoToAttach : pedido.getPlatopedidoCollection()) {
+            Collection<Platopedido> attachedPlatopedidoCollection = new ArrayList<Platopedido>();
+            for (Platopedido platopedidoCollectionPlatopedidoToAttach : pedido.getPlatopedidoCollection()) {
                 platopedidoCollectionPlatopedidoToAttach = em.getReference(platopedidoCollectionPlatopedidoToAttach.getClass(), platopedidoCollectionPlatopedidoToAttach.getIdPlatoPedido());
                 attachedPlatopedidoCollection.add(platopedidoCollectionPlatopedidoToAttach);
             }
@@ -101,7 +100,7 @@ public class LogPedido implements Serializable {
                     oldIdPedidoOfFacturaCollectionFactura = em.merge(oldIdPedidoOfFacturaCollectionFactura);
                 }
             }
-            for (PlatoPedido platopedidoCollectionPlatopedido : pedido.getPlatopedidoCollection()) {
+            for (Platopedido platopedidoCollectionPlatopedido : pedido.getPlatopedidoCollection()) {
                 Pedido oldIdPedidoOfPlatopedidoCollectionPlatopedido = platopedidoCollectionPlatopedido.getIdPedido();
                 platopedidoCollectionPlatopedido.setIdPedido(pedido);
                 platopedidoCollectionPlatopedido = em.merge(platopedidoCollectionPlatopedido);
@@ -132,8 +131,8 @@ public class LogPedido implements Serializable {
             Mesero idMeseroNew = pedido.getIdMesero();
             Collection<Factura> facturaCollectionOld = persistentPedido.getFacturaCollection();
             Collection<Factura> facturaCollectionNew = pedido.getFacturaCollection();
-            Collection<PlatoPedido> platopedidoCollectionOld = persistentPedido.getPlatopedidoCollection();
-            Collection<PlatoPedido> platopedidoCollectionNew = pedido.getPlatopedidoCollection();
+            Collection<Platopedido> platopedidoCollectionOld = persistentPedido.getPlatopedidoCollection();
+            Collection<Platopedido> platopedidoCollectionNew = pedido.getPlatopedidoCollection();
             List<String> illegalOrphanMessages = null;
             for (Factura facturaCollectionOldFactura : facturaCollectionOld) {
                 if (!facturaCollectionNew.contains(facturaCollectionOldFactura)) {
@@ -143,7 +142,7 @@ public class LogPedido implements Serializable {
                     illegalOrphanMessages.add("You must retain Factura " + facturaCollectionOldFactura + " since its idPedido field is not nullable.");
                 }
             }
-            for (PlatoPedido platopedidoCollectionOldPlatopedido : platopedidoCollectionOld) {
+            for (Platopedido platopedidoCollectionOldPlatopedido : platopedidoCollectionOld) {
                 if (!platopedidoCollectionNew.contains(platopedidoCollectionOldPlatopedido)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
@@ -173,8 +172,8 @@ public class LogPedido implements Serializable {
             }
             facturaCollectionNew = attachedFacturaCollectionNew;
             pedido.setFacturaCollection(facturaCollectionNew);
-            Collection<PlatoPedido> attachedPlatopedidoCollectionNew = new ArrayList<PlatoPedido>();
-            for (PlatoPedido platopedidoCollectionNewPlatopedidoToAttach : platopedidoCollectionNew) {
+            Collection<Platopedido> attachedPlatopedidoCollectionNew = new ArrayList<Platopedido>();
+            for (Platopedido platopedidoCollectionNewPlatopedidoToAttach : platopedidoCollectionNew) {
                 platopedidoCollectionNewPlatopedidoToAttach = em.getReference(platopedidoCollectionNewPlatopedidoToAttach.getClass(), platopedidoCollectionNewPlatopedidoToAttach.getIdPlatoPedido());
                 attachedPlatopedidoCollectionNew.add(platopedidoCollectionNewPlatopedidoToAttach);
             }
@@ -216,7 +215,7 @@ public class LogPedido implements Serializable {
                     }
                 }
             }
-            for (PlatoPedido platopedidoCollectionNewPlatopedido : platopedidoCollectionNew) {
+            for (Platopedido platopedidoCollectionNewPlatopedido : platopedidoCollectionNew) {
                 if (!platopedidoCollectionOld.contains(platopedidoCollectionNewPlatopedido)) {
                     Pedido oldIdPedidoOfPlatopedidoCollectionNewPlatopedido = platopedidoCollectionNewPlatopedido.getIdPedido();
                     platopedidoCollectionNewPlatopedido.setIdPedido(pedido);
@@ -264,8 +263,8 @@ public class LogPedido implements Serializable {
                 }
                 illegalOrphanMessages.add("This Pedido (" + pedido + ") cannot be destroyed since the Factura " + facturaCollectionOrphanCheckFactura + " in its facturaCollection field has a non-nullable idPedido field.");
             }
-            Collection<PlatoPedido> platopedidoCollectionOrphanCheck = pedido.getPlatopedidoCollection();
-            for (PlatoPedido platopedidoCollectionOrphanCheckPlatopedido : platopedidoCollectionOrphanCheck) {
+            Collection<Platopedido> platopedidoCollectionOrphanCheck = pedido.getPlatopedidoCollection();
+            for (Platopedido platopedidoCollectionOrphanCheckPlatopedido : platopedidoCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
@@ -344,44 +343,4 @@ public class LogPedido implements Serializable {
         }
     }
     
-    public Pedido BuscarPedido(int numPedido) {
-        List<Pedido> listaPedidos = findPedidoEntities();
-        Pedido result = null;
-        for(Pedido aux:listaPedidos){
-            if(aux.getNumeroPedido()==numPedido){
-                result = aux;
-            }
-        }
-        return result;
-    }
-    
-    public static void calcularTiempoAprox(Pedido pedido) {
-        
-        double tiempoTotal = calcularTiempoTotal(pedido);
-        double sumatoria = 0.00;
-        int n = 0;
-        for (PlatoPedido objPlatoPedido : pedido.getPlatopedidoCollection()) {
-            Plato plato = objPlatoPedido.getIdPlato();
-
-            double peso = calcularPesoPlato(objPlatoPedido, tiempoTotal);
-            sumatoria += ((plato.getTiempo() + ((2 * objPlatoPedido.getCantidad()) - 2)) * peso);
-            n += 1;
-
-        }
-        pedido.setTiempoAproximado((sumatoria+tiempoTotal)/2);
-
-    }
-
-    public static double calcularTiempoTotal(Pedido pedido) {
-        double tiempoTotal = 0.00;
-        for (PlatoPedido platoPedido : pedido.getPlatopedidoCollection()) {
-            tiempoTotal += platoPedido.getIdPlato().getTiempo()+ ((2 * platoPedido.getCantidad()) - 2);
-        }
-        return tiempoTotal;
-    }
-
-    public static double calcularPesoPlato(PlatoPedido platoPedido, double tiempoTotal) {
-        double peso = (platoPedido.getIdPlato().getTiempo() + ((2 * platoPedido.getCantidad()) - 2)) / tiempoTotal;
-        return peso;
-    }
 }
