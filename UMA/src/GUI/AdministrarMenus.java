@@ -635,8 +635,9 @@ public class AdministrarMenus extends javax.swing.JInternalFrame {
     }
     
     void leerMenus() throws IOException, FileNotFoundException, ClassNotFoundException {
-
+        
         ArrayMenu = objLogMenu.findMenuEntities();
+        System.out.println(ArrayMenu.size());
         this.jTableListaMenus.removeAll();
         Object columnas[] = {"Nombre", "Descripcion", "Dias", "Meses"};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);

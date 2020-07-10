@@ -40,6 +40,7 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
     static Collection<Plato> ArrayPlatos = null;
     
     static Collection<Platopedido> ArrayPlatosPedido = null;
+    static Collection<Platopedido> PlatosAdicionales = new ArrayList<Platopedido>();
 
     static Plato platoSel = new Plato();
     static Pedido objPedido = new Pedido();
@@ -255,6 +256,14 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
 
     private void jButtonAgregarPlato1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarPlato1ActionPerformed
         try {
+            for(Platopedido aux: ArrayPlatosPedido){
+                if(aux.getIdPlatoPedido()==null){
+                    aux.setIdPlatoPedido(objLogPlatopedido.getPlatopedidoCount()+1);
+                    objLogPlatopedido.create(aux);
+                }
+            }
+            objPedido.setPlatopedidoCollection(ArrayPlatosPedido);
+            objPedido.setEstado(1);
             objLogPedido.edit(objPedido);
         } catch (IOException ex) {
             Logger.getLogger(AgregarPlato.class.getName()).log(Level.SEVERE, null, ex);
@@ -272,7 +281,6 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         int cantidad = (Integer) jSpinnerCantidad.getValue();
         String Observacion = jTextAreaObservacion.getText();
         objPlatopedido = new Platopedido();
-        objPlatopedido.setIdPlatoPedido(objLogPlatopedido.getPlatopedidoCount()+1);
         objPlatopedido.setCantidad(cantidad);
         objPlatopedido.setObservacion(Observacion);
         objPlatopedido.setEstado(1);
@@ -306,6 +314,7 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         objPedido = objLogPedido.BuscarPedido(Integer.parseInt(this.jTextFieldBusquedaPedido.getText()));
         ArrayPlatosPedido = objPedido.getPlatopedidoCollection();
         listarPlatosPedido();
+        this.jTextFieldNumeroMesa.setText(String.valueOf(objPedido.getNumMesa()));
     }
 
     public void listarPlatosPedido() {
@@ -315,11 +324,13 @@ public class AgregarPlato extends javax.swing.JInternalFrame {
         jTablePedidoAdicionales.setModel(modelo);
 
         for (Platopedido objPlatopedido : ArrayPlatosPedido) {
+            System.out.println(objPlatopedido.getIdPlato());
             String NewValor[] = {
                 objPlatopedido.getIdPlato().getNombre(),
                 String.valueOf(objPlatopedido.getCantidad()),
                 objPlatopedido.getObservacion()
             };
+            
             modelo.addRow(NewValor);
         }
 

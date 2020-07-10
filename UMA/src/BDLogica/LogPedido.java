@@ -31,7 +31,9 @@ import javax.persistence.Persistence;
  * @author USUARIO
  */
 public class LogPedido implements Serializable {
-
+    
+    LogPlato objlogLogPlato = new LogPlato();
+    
     public LogPedido() {
         this.emf = Persistence.createEntityManagerFactory("UMAPU");
     }
@@ -345,11 +347,14 @@ public class LogPedido implements Serializable {
     }
     
     public Pedido BuscarPedido(int numPedido) {
+        
         List<Pedido> listaPedidos = findPedidoEntities();
-        Pedido result = null;
+        List<Plato> listaPlatos = objlogLogPlato.findPlatoEntities();
+        Pedido result = null;        
         for(Pedido aux:listaPedidos){
-            if(aux.getNumeroPedido()==numPedido){
+            if(aux.getNumeroPedido() == numPedido){               
                 result = aux;
+                ;
             }
         }
         return result;
