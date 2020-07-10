@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -25,8 +26,13 @@ import javax.persistence.EntityManagerFactory;
  */
 public class LogFeedback implements Serializable {
 
+<<<<<<< HEAD:UMA/src/BDLogica/LogFeedback.java
     public LogFeedback(EntityManagerFactory emf) {
         this.emf = emf;
+=======
+    public LogFeedback() {
+        this.emf = Persistence.createEntityManagerFactory("UMAPU");
+>>>>>>> origin/paul:UMA/src/BDLogica/FeedbackJpaController.java
     }
     private EntityManagerFactory emf = null;
 
