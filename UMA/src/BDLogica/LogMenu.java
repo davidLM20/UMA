@@ -13,8 +13,12 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Entidades.Plato;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -177,6 +181,40 @@ public class LogMenu implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public Menu MenuActivo() throws IOException, FileNotFoundException, ClassNotFoundException {
+        Date fecha = new Date();
+        SimpleDateFormat format_dia = new SimpleDateFormat("E");
+        SimpleDateFormat format_mes = new SimpleDateFormat("MMM");
+        String dia = format_dia.format(fecha);
+        String mes = format_mes.format(fecha);
+        List<Menu> ArrayMenus = findMenuEntities();
+
+        for (Menu objMenu : ArrayMenus) {
+            String aux = objMenu.getDias().substring(0, objMenu.getDias().length() - 1);
+            String[] dias = aux.split("\\|");
+            String aux2 = objMenu.getMeses().substring(0, objMenu.getMeses().length() - 1);
+            String[] meses = aux2.split("\\|");
+
+            for (String auxMes : meses) {
+                auxMes.toLowerCase();
+
+                if (auxMes.toLowerCase().equals(mes)) {
+                    for (String auxDia : dias) {
+                        auxDia.toLowerCase();
+
+                        if (auxDia.toLowerCase().equals(dia)) {
+
+                            return objMenu;
+
+                        }
+                    }
+                }
+            }
+
+        }
+        return null;
     }
     
 }
