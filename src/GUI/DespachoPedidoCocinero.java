@@ -51,11 +51,11 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
 
     public DespachoPedidoCocinero() throws IOException, FileNotFoundException, ClassNotFoundException {
         initComponents();
-        
+
         this.cocinerosLogueados = cocinerosLogueados;
-        
+
         CargarCombos();
-        
+
     }
 
     /**
@@ -177,9 +177,9 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActualizarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarPedidosActionPerformed
-            
-            ActualizarTablaPedido();
-       
+
+        ActualizarTablaPedido();
+
     }//GEN-LAST:event_jButtonActualizarPedidosActionPerformed
 
     private void jButtonPlatoProcesadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlatoProcesadoActionPerformed
@@ -190,13 +190,12 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
         }
         leerPlatosPedido();
         ActivarBoton();
-        
+
 
     }//GEN-LAST:event_jButtonPlatoProcesadoActionPerformed
 
     private void jButtonProcesarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProcesarPedidoActionPerformed
 
-        
         for (Object objAux : ArrayPlatosPedido) {
             Platopedido objPlatoPedido = (Platopedido) objAux;
             if (objPlatoPedido.getEstado() == 1) {
@@ -219,7 +218,6 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
         leerPlatosPedido();
         ActualizarTablaPedido();
         ActivarBoton();
-        
 
 
     }//GEN-LAST:event_jButtonProcesarPedidoActionPerformed
@@ -251,7 +249,6 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
         objPedido = (Pedido) ArrayPedidos.get(rowPedido);
         ArrayPlatosPedido = (List<Platopedido>) objPedido.getPlatopedidoCollection();
     }//GEN-LAST:event_jTablePedidosMouseClicked
-    
 
     public void CargarCombos() throws IOException, FileNotFoundException, ClassNotFoundException {
         this.jComboBoxCocinero.setModel(new DefaultComboBoxModel(objLogCocinero.findCocineroEntities().toArray()));
@@ -269,21 +266,23 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
             Pedido objPedido = (Pedido) objAux;
             if (objPedido.getEstado() == 1) {
                 estado = "Registrado";
+                String NewValor[] = {
+                    String.valueOf(objPedido.getNumeroPedido()),
+                    estado,
+                    String.valueOf(objPedido.getTiempoAproximado())
+                };
+                modelo.addRow(NewValor);
+                
             } else if (objPedido.getEstado() == 2) {
                 estado = "Cocinando";
-            } else if (objPedido.getEstado() == 3) {
-                estado = "Despachado";
-            } else if (objPedido.getEstado() == 4) {
-                estado = "Pagando";
-            } else if (objPedido.getEstado() == 5) {
-                estado = "Finalizado";
+                String NewValor[] = {
+                    String.valueOf(objPedido.getNumeroPedido()),
+                    estado,
+                    String.valueOf(objPedido.getTiempoAproximado())
+                };
+                modelo.addRow(NewValor);
             }
-            String NewValor[] = {
-                String.valueOf(objPedido.getNumeroPedido()),
-                estado,
-                String.valueOf(objPedido.getTiempoAproximado())
-            };
-            modelo.addRow(NewValor);
+
         }
     }
 
@@ -337,7 +336,6 @@ public class DespachoPedidoCocinero extends javax.swing.JInternalFrame {
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
         jTablePlatosPedido.setModel(modelo);
         objPedido = (Pedido) ArrayPedidos.get(rowPedido);
-        
 
         for (Object objAux : ArrayPlatosPedido) {
             Platopedido objPlatoPedido = (Platopedido) objAux;
