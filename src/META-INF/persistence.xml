@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="UMAPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>Entidades.Mesero</class>
+    <class>Entidades.Platopedido</class>
+    <class>Entidades.Cliente</class>
+    <class>Entidades.Cajero</class>
+    <class>Entidades.Feedback</class>
+    <class>Entidades.Menu</class>
+    <class>Entidades.Pedido</class>
+    <class>Entidades.Factura</class>
+    <class>Entidades.Cocinero</class>
+    <class>Entidades.Plato</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://den1.mysql5.gear.host:3306/umadb1"/>
+      <property name="javax.persistence.jdbc.user" value="umadb1"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="Kx61757?_sV5"/>
+    </properties>
+  </persistence-unit>
+</persistence>
